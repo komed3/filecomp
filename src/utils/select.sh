@@ -36,4 +36,40 @@ select_menu () {
     local pointer=0              # Current cursor position
     local key                    # Buffer for key input
 
+    # Set initial states (default 0)
+    for (( i=0; i < count; i++ )); do
+        selected[i]=${init_ref[i]:-0}
+    done
+
+    # Main loop
+    while true; do
+
+        clear
+        echo "$title"
+        echo
+
+        # List all options
+        for i in "${!opts_ref[@]}"; do
+
+            # Highlight cursor on current line
+            if (( i == pointer )); then
+                cursor="$(tput setaf 3) > $(tput sgr0)"
+            else
+                cursor="   "
+            fi
+
+            # Mark with green "x" or empty depending on selection status
+            if (( selected[i] == 1 )); then
+                mark="$(tput setaf 2)x$(tput sgr0)"
+            else
+                mark=" "
+            fi
+
+            # Print the line
+            printf "%s[%s] %s\n" "$cursor" "$mark" "${opts_ref[i]}"
+
+        done
+
+    done
+
 }
