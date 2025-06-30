@@ -41,12 +41,15 @@ select_menu () {
         selected[i]=${init_ref[i]:-0}
     done
 
+    # Change terminal output (hide cursor, clean up on abort)
+    tput civis
+    trap "tput cnorm; clear; exit" SIGINT SIGTERM
+
     # Main loop
     while true; do
 
-        clear
-        echo "$title"
-        echo
+        # Print the select menu title
+        clear; tput bold; echo "$title"; tput sgr0; echo
 
         # List all options
         for i in "${!opts_ref[@]}"; do
@@ -70,6 +73,73 @@ select_menu () {
 
         done
 
+        # Print options / menu actions
+        echo; tput bold; echo "[↑/↓] Move  [␣] Toggle  [↵] Confirm  [Q] Quit"; tput sgr0; echo
+
+        # Read key input (with escape for arrow keys)
+        IFS= read -rsn1 key
+
+        if [[ $key == $'\x1b' ]]; then
+            read -rsn2 rest
+            key+="$rest"
+        fi
+
+        # Parse key input
+        case "$key" in
+
+            # Navigate upwards
+            $'\x1b[A')
+                (( pointer = ( pointer - 1 + count ) % count ))
+                ;;
+
+            # Navigate down
+            $'\x1b[B')
+                (( pointer = ( pointer + 1 ) % count ))
+                ;;
+
+            # Toggle selection
+            " ")
+                if (( multi_flag == 0 )); then
+                    # Radio: deselect all, then activate the current one
+                    for (( j=0; j < count; j++ )); do selected[j]=0; done
+                    selected[pointer]=1
+                else
+                    # Checkbox: only deselect if allowed
+                    if (( selected[pointer] == 1 )); then
+                        (( allow_none == 1 )) && selected[pointer]=0
+                    else
+                        selected[pointer]=1
+                    fi
+                fi
+                ;;
+
+            # Enter: only continue if selection is valid
+            "")
+                if (( require_one == 1 )); then
+                    local any=0
+                    for v in "${selected[@]}"; do (( v == 1 )) && any=1; done
+                    (( any == 1 )) || { tput bel; continue; }
+                fi
+                break
+                ;;
+
+            # Quit program
+            [qQ])
+                tput cnorm; clear; exit 1
+                ;;
+
+        esac
+
+    done
+
+    # reset terminal
+    tput cnorm
+
+    # Write result to array
+    result=()
+
+    for i in "${!selected[@]}"; do
+        (( selected[i] == 1 )) && result+=("$i")
     done
 
 }
