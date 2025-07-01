@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export RESET="$(tput sgr0)"
+export REV="$(tput rev)"
 
 export BLACK="$(tput setaf 0)"
 export RED="$(tput setaf 1)"

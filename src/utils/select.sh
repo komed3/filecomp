@@ -68,7 +68,7 @@ select_menu () {
 
             # Highlight current line
             if (( i == pointer )); then
-                hl="${BLACK}${BG_WHITE}"
+                hl="${REV}"
             fi
 
             # Mark "x" on selected option
