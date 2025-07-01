@@ -82,22 +82,20 @@ print_actions () {
     tput cup $row 0
 
     # List all options
-    local i=1
-    while [[ $i -lt $# ]]; do
+    for (( i=1; i <= $#; i++ )); do
 
         local text="${!i}"
-        local next=$(( i + 1 ))
-        local color="${!next}"
+        local j=$(( i + 1 ))
+        local color="${!j}"
 
         printf "%s" "$PRFX"
 
         # Print option with color if specified
         if [[ $color =~ ^[0-9]+$ ]]; then
             color_output "$text" $color
-            i=$(( i + 2 ))
+            (( i++ ))
         else
             printf "%s" "$text"
-            i=$(( i + 1 ))
         fi
 
     done
