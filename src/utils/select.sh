@@ -51,7 +51,7 @@ select_menu () {
         print_header
 
         # Print the select menu title
-        echo "$PRFX$title"; echo
+        echo "$PRFX$S_ULINE$title$R_ULINE"; echo
 
         # List all options
         for i in "${!opts_ref[@]}"; do

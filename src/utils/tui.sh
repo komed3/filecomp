@@ -13,7 +13,7 @@ source ./src/utils/colors.sh
 # Terminal dimensions
 export COLS=$( tput cols )
 export ROWS=$( tput lines )
-export PRFX="   "
+export PRFX="  "
 
 # Change terminal output and clears it
 # Hide cursor, clean up on abort
