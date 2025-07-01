@@ -44,6 +44,9 @@ select_menu () {
         selected[i]=${init_ref[i]:-0}
     done
 
+    # Clear previous content
+    clear_content
+
     # Print options / menu actions
     print_actions "[⇕] Move" "[␣] Toggle" "[↵] Confirm" 2 "[Q] Quit"
 
@@ -51,8 +54,8 @@ select_menu () {
     # Show options list and proceed user inputs
     while true; do
 
-        # Clear previous content
-        clear_content
+        # Jump to content
+        jump_content
 
         # Print the menu title
         print_title "$title"
