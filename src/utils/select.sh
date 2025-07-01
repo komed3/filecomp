@@ -114,6 +114,7 @@ select_menu () {
                 ;;
 
             # Enter: only continue if selection is valid
+            # If input is required, beep on empty
             "")
                 if (( require_one == 1 )); then
                     local any=0
