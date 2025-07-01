@@ -77,7 +77,7 @@ select_menu () {
         done
 
         # Print options / menu actions
-        print_actions "[↑/↓] Move" "[␣] Toggle" "[↵] Confirm" 2 "[Q] Quit" 1
+        print_actions "[⇕] Move" "[␣] Toggle" "[↵] Confirm" 2 "[Q] Quit" 1
 
         # Print the program footer
         print_footer
