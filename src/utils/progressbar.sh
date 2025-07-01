@@ -2,7 +2,7 @@
 
 # --------------------------------------------------------------------------------
 # src/utils/progress.sh
-# Progress bar
+# Progress Bar
 #
 # Progress bar with spinner, percentage display, and estimated time of arrival
 # (ETA). It displays in full color with a Braille spinner and a filled bar.

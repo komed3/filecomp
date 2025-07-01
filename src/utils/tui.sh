@@ -40,7 +40,7 @@ jump_content () {
 # Helper function to clear content
 clear_content () {
 
-    for (( i=$START; i < $END; i++ )); do
+    for (( i=START; i < END; i++ )); do
       tput cup $i 0; tput el
     done
 

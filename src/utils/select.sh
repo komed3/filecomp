@@ -2,7 +2,7 @@
 
 # --------------------------------------------------------------------------------
 # src/utils/select.sh
-# Interactive terminal menu (radio & checkbox)
+# Interactive Terminal Menu (radio & checkbox)
 #
 # Function: select_menu
 # Parameters:
