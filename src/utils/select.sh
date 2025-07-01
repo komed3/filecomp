@@ -44,30 +44,33 @@ select_menu () {
         selected[i]=${init_ref[i]:-0}
     done
 
-    # Main loop
+    # Print options / menu actions
+    print_actions "[⇕] Move" "[␣] Toggle" "[↵] Confirm" 2 "[Q] Quit"
+
+    # The main loop
+    # Show options list and proceed user inputs
     while true; do
 
-        # Print the program header
-        print_header
+        # Clear previous content
+        clear_content
 
-        # Print the select menu title
+        # Print the menu title
         print_title "$title"
 
         # List all options
         for i in "${!opts_ref[@]}"; do
 
             hl=""
+            mark=" "
 
             # Highlight current line
             if (( i == pointer )); then
                 hl="${BLACK}${BG_WHITE}"
             fi
 
-            # Mark "x" or empty depending on selection status
+            # Mark "x" on selected option
             if (( selected[i] == 1 )); then
                 mark="x"
-            else
-                mark=" "
             fi
 
             # Print the line
@@ -75,12 +78,6 @@ select_menu () {
             reset_color
 
         done
-
-        # Print options / menu actions
-        print_actions "[⇕] Move" "[␣] Toggle" "[↵] Confirm" 2 "[Q] Quit"
-
-        # Print the program footer
-        print_footer
 
         # Read key input (with escape for arrow keys)
         IFS= read -rsn1 key
@@ -132,15 +129,12 @@ select_menu () {
 
             # Quit program
             [qQ])
-                tput cnorm; clear; exit 1
+                quit
                 ;;
 
         esac
 
     done
-
-    # reset terminal
-    tput cnorm
 
     # Write result to array
     result=()

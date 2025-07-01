@@ -13,27 +13,46 @@ source ./src/utils/colors.sh
 # Terminal dimensions
 export COLS=$( tput cols )
 export ROWS=$( tput lines )
+export START=2
+export END=$(( ROWS - 6 ))
 export PRFX="  "
 
 # Change terminal output and clears it
 # Hide cursor, clean up on abort
-clear_screen () {
-
-    tput civis
-    clear
+setup_screen () {
 
     trap "tput cnorm; clear; exit" SIGINT SIGTERM
+    tput civis
+
+}
+
+# Quit the program safely
+quit () {
+    tput cnorm; clear; exit 1
+}
+
+# Helper to jump to the right cell for content
+jump_content () {
+    tput cup $START 0
+}
+
+# Helper function to clear content
+clear_content () {
+
+    for (( i=$START; i < $END; i++ )); do
+      tput cup $i 0; tput el
+    done
+
+    jump_content
 
 }
 
 # Program header
-# Displays the header and clears the terminal
+# Displays the header with the program name
 print_header () {
 
     local left=$(( ( COLS - 10 ) / 2 ))
     local right=$(( COLS - left - 10 ))
-
-    clear_screen
 
     tput cup 0 0
     set_bgcol 7
@@ -43,7 +62,6 @@ print_header () {
     set_bgcol 7
     printf "%*s" "$right" ""
     reset_color
-    tput cup 2 0
 
 }
 
