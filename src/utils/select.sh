@@ -16,8 +16,8 @@
 # Array 'result' contains the selected indices
 # --------------------------------------------------------------------------------
 
-source ./colors.sh
-source ./tui.sh
+source ./src/utils/colors.sh
+source ./src/utils/tui.sh
 
 select_menu () {
 
@@ -59,14 +59,14 @@ select_menu () {
 
             # Highlight cursor on current line
             if (( i == pointer )); then
-                cursor="${YELLOW} > ${RESET}"
+                cursor="${BOLD}  > ${RESET}"
             else
-                cursor="   "
+                cursor="    "
             fi
 
             # Mark with green "x" or empty depending on selection status
             if (( selected[i] == 1 )); then
-                mark="${GREEN}x${RESET}"
+                mark="${BOLD}x${RESET}"
             else
                 mark=" "
             fi

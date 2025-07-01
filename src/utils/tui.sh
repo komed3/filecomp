@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./colors.sh
+source ./src/utils/colors.sh
 
 # Terminal dimensions
 COLS=$( tput cols )
@@ -8,7 +8,7 @@ ROWS=$( tput lines )
 
 print_actions () {
 
-    local row=$(( ROWS - 3 ))
+    local row=$(( ROWS - 4 ))
     tput cup $row 0
 
     local i=1
@@ -18,15 +18,15 @@ print_actions () {
         local next=$(( i + 1 ))
         local color="${!next}"
 
+        printf "   "
+
         if [[ $color =~ ^[0-9]+$ ]]; then
-            color_output "$text" 7 $color
+            color_output "$text" $color
             i=$(( i + 2 ))
         else
             printf "%s" "$text"
             i=$(( i + 1 ))
         fi
-
-        printf "   "
 
     done
 

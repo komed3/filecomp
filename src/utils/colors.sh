@@ -19,6 +19,7 @@ export    BG_CYAN="$(tput setab 6)"
 export   BG_WHITE="$(tput setab 7)"
 
 export RESET="$(tput sgr0)"
+export BOLD="$(tput bold)"
 
 reset_color () {
     tput sgr0
