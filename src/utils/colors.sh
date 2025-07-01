@@ -46,7 +46,7 @@ color_output () {
       set_bgcol $bgcol
     fi
 
-    echo $text
+    printf "%s" "$text"
     reset_color
 
 }

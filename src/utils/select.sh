@@ -74,7 +74,7 @@ select_menu () {
         done
 
         # Print options / menu actions
-        echo; tput bold; echo "[↑/↓] Move  [␣] Toggle  [↵] Confirm  [Q] Quit"; tput sgr0; echo
+        print_actions "[↑/↓] Move" "[␣] Toggle" "[↵] Confirm" 2 "[Q] Quit" 1
 
         # Read key input (with escape for arrow keys)
         IFS= read -rsn1 key
