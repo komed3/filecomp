@@ -18,6 +18,8 @@ export BG_MAGENTA="$(tput setab 5)"
 export    BG_CYAN="$(tput setab 6)"
 export   BG_WHITE="$(tput setab 7)"
 
+export RESET="$(tput sgr0)"
+
 reset_color () {
     tput sgr0
 }

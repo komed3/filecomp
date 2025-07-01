@@ -16,6 +16,9 @@
 # Array 'result' contains the selected indices
 # --------------------------------------------------------------------------------
 
+source ./colors.sh
+source ./tui.sh
+
 select_menu () {
 
     # Proceed inputs
@@ -56,14 +59,14 @@ select_menu () {
 
             # Highlight cursor on current line
             if (( i == pointer )); then
-                cursor="$(tput setaf 3) > $(tput sgr0)"
+                cursor="${YELLOW} > ${RESET}"
             else
                 cursor="   "
             fi
 
             # Mark with green "x" or empty depending on selection status
             if (( selected[i] == 1 )); then
-                mark="$(tput setaf 2)x$(tput sgr0)"
+                mark="${GREEN}x${RESET}"
             else
                 mark=" "
             fi
