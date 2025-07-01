@@ -16,6 +16,7 @@ export ROWS=$( tput lines )
 export START=2
 export END=$(( ROWS - 6 ))
 export PRFX="  "
+export LGAP=2
 
 # Change terminal output and clears it
 # Hide cursor, clean up on abort
