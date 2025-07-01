@@ -12,7 +12,7 @@ source ./src/utils/tui.sh
 
 # Progress bar config
 SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
-BAR_FILLER="█"
+BAR_FILLER="#"
 BAR_EMPTY=" "
 _ROW=$(( ROWS - 5 ))
 _LEN=$(( COLS - 22 - ( LGAP * 2 ) ))

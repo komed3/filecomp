@@ -14,7 +14,7 @@ source ./src/utils/colors.sh
 export COLS=$( tput cols )
 export ROWS=$( tput lines )
 export START=2
-export END=$(( ROWS - 6 ))
+export END=$(( ROWS - 7 ))
 export PRFX="  "
 export LGAP=2
 
@@ -97,7 +97,7 @@ print_title () {
 # (2) optional color (e.g. 4 for blue)
 print_actions () {
 
-    local row=$(( ROWS - 4 ))
+    local row=$(( ROWS - 3 ))
     tput cup $row 0
 
     # List all options
