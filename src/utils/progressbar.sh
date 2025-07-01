@@ -64,7 +64,7 @@ progressbar_update () {
     local empty=$(( _LEN - fill ))
 
     # Output the formatted progress bar
-    tput cup $_ROW 0
+    tput cup $_ROW 0; tput el
     printf "%s%s %3d%% [%s%s] ETA %s" \
         "$PRFX" "$spinner" "$pct" \
         "$(printf "%${fill}s" | tr ' ' "$BAR_FILLER")" \
