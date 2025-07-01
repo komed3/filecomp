@@ -24,6 +24,7 @@ export S_ULINE="$(tput smul)"
 export R_ULINE="$(tput rmul)"
 export S_SOLID="$(tput smso)"
 export R_SOLID="$(tput rmso)"
+export BOLD="$(tput bold)"
 
 reset_color () {
     tput sgr0

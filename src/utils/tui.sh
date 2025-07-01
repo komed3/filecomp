@@ -54,7 +54,7 @@ print_footer () {
     local row=$(( ROWS - 1 ))
     tput cup $row 0
 
-    local credits="(c) 2025 Paul Köhler (komed3) — FILECOME v0.1.0"
+    local credits="(c) 2025 [MIT] Paul Köhler (komed3) — FILECOME v0.1.0"
     local len=${#credits}
     local left=$(( COLS - len - 1 ))
 
