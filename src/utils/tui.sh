@@ -66,6 +66,12 @@ print_footer () {
 
 }
 
+# Print a (underlined) title line
+print_title () {
+    local title="$1"
+    echo "$PRFX$S_ULINE$title$R_ULINE"; echo
+}
+
 # Helper: Display action line
 # Transfer two values per action
 # (1) text
@@ -75,6 +81,7 @@ print_actions () {
     local row=$(( ROWS - 4 ))
     tput cup $row 0
 
+    # List all options
     local i=1
     while [[ $i -lt $# ]]; do
 
@@ -84,6 +91,7 @@ print_actions () {
 
         printf "%s" "$PRFX"
 
+        # Print option with color if specified
         if [[ $color =~ ^[0-9]+$ ]]; then
             color_output "$text" $color
             i=$(( i + 2 ))
