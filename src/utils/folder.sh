@@ -39,7 +39,7 @@ select_folder () {
         jump_content
 
         # Print the current path
-        tput cup $current 0; tput el
+        set_line $current
         printf "%sPath: %s%s" "$PRFX" "${YELLOW}" "$current_path"
         reset_color
 
@@ -57,7 +57,7 @@ select_folder () {
             local index=$(( i + offset ))
             local line=$(( begin + i ))
 
-            tput cup $line 0; tput el
+            set_line $line
 
             [[ $index -ge ${#entries[@]} ]] && break
 
@@ -75,15 +75,14 @@ select_folder () {
         # Delete old lines surplus to demand
         for (( i=${#entries[@]} - offset; i < visible_count; i++ )); do
             local line=$(( begin + i ))
-            tput cup $line 0; tput el
+            set_line $line
         done
 
         # Read key input (with escape for arrow keys)
         IFS= read -rsn1 key
 
         if [[ $key == $'\x1b' ]]; then
-            read -rsn2 rest
-            key+="$rest"
+            read -rsn2 rest; key+="$rest"
         fi
 
         # Parse key input

@@ -81,8 +81,7 @@ select_menu () {
         IFS= read -rsn1 key
 
         if [[ $key == $'\x1b' ]]; then
-            read -rsn2 rest
-            key+="$rest"
+            read -rsn2 rest; key+="$rest"
         fi
 
         # Parse key input

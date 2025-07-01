@@ -34,6 +34,11 @@ progressbar_init () {
 
 }
 
+# Hide / remove the progress bar
+progressbar_clear () {
+    set_line $_ROW
+}
+
 # Update (draw) progress bar
 # Will automatically calculate ETA, progress and bar
 progressbar_update () {
@@ -64,7 +69,7 @@ progressbar_update () {
     local empty=$(( _LEN - fill ))
 
     # Output the formatted progress bar
-    tput cup $_ROW 0; tput el
+    progressbar_clear
     printf "%s%s %3d%% [%s%s] ETA %s" \
         "$PRFX" "$spinner" "$pct" \
         "$(printf "%${fill}s" | tr ' ' "$BAR_FILLER")" \
@@ -76,9 +81,4 @@ progressbar_update () {
 # Finalize progress bar / set to 100%
 progressbar_finish () {
     progressbar_update $TOTAL; echo
-}
-
-# Hide the progress bar
-progressbar_clear () {
-    tput cup $_ROW 0; tput el
 }

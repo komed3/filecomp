@@ -37,15 +37,15 @@ jump_content () {
     tput cup $START 0
 }
 
+set_line () {
+    local line="$1"
+    tput cup $line 0; tput el
+}
+
 # Helper function to clear content
 clear_content () {
-
-    for (( i=START; i < END; i++ )); do
-      tput cup $i 0; tput el
-    done
-
+    for (( i=START; i < END; i++ )); do set_line $i; done
     jump_content
-
 }
 
 # Program header
@@ -55,7 +55,7 @@ print_header () {
     local left=$(( ( COLS - 10 ) / 2 ))
     local right=$(( COLS - left - 10 ))
 
-    tput cup 0 0
+    set_line 0
     set_bgcol 7
     printf "%*s" "$left" ""
     reset_color
@@ -71,7 +71,7 @@ print_header () {
 print_footer () {
 
     local row=$(( ROWS - 1 ))
-    tput cup $row 0
+    set_line $row
 
     local credits="(c) 2025 [MIT] Paul Köhler (komed3) — FILECOME v0.1.0"
     local len=${#credits}
@@ -98,7 +98,7 @@ print_title () {
 print_actions () {
 
     local row=$(( ROWS - 3 ))
-    tput cup $row 0
+    set_line $row
 
     # List all options
     for (( i=1; i <= $#; i++ )); do
