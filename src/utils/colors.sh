@@ -31,3 +31,22 @@ set_bgcol () {
     local color="$1"
     tput setab $color
 }
+
+color_output () {
+
+    local text="$1"
+    local color="$2"
+    local bgcol="$3"
+
+    if [[ $color =~ ^[0-9]+$ ]]; then
+      set_color $color
+    fi
+
+    if [[ $bgcol =~ ^[0-9]+$ ]]; then
+      set_bgcol $bgcol
+    fi
+
+    echo $text
+    reset_color
+
+}
