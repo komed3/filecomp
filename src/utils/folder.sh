@@ -9,18 +9,21 @@
 # -> Enter selects folder
 # --------------------------------------------------------------------------------
 
+source ./src/utils/colors.sh
 source ./src/utils/tui.sh
 
 select_folder() {
 
-    local lbeg=$(( START + 2 ))
-    local lend=END
+    local begin=$(( START + 2 ))
     local current_path="$1"
     local entries
 
     local pointer=0
     local key
 
+    print_actions "[⇕] Move" "[⇔] Navigate" "[↵] Confirm" 2 "[Q] Quit"
+
+    clear_screen
     print_title "SELECT FOLDER"
 
     # The main loop
@@ -29,7 +32,7 @@ select_folder() {
 
         # Inhalt des Ordners einlesen (nur Verzeichnisse)
         mapfile -t entries < <(find "$current_path" -mindepth 1 -maxdepth 1 -type d | sort)
-        local visible_count=$(( lend - lbeg ))
+        local visible_count=$(( END - begin ))
 
         # Startposition der Anzeige berechnen (für Scroll-Effekt)
         local offset=0
@@ -39,7 +42,7 @@ select_folder() {
         for (( i=0; i < visible_count; i++ )); do
 
             local index=$(( i + offset ))
-            local line=$(( lbeg + i ))
+            local line=$(( begin + i ))
 
             [[ $index -ge ${#entries[@]} ]] && break
 
@@ -48,16 +51,22 @@ select_folder() {
             tput cup $line 0
             tput el
 
+            hl=""
+
             if (( index == pointer )); then
-                tput rev  # Reverse video
-                printf " > %s" "$name"
-                tput sgr0
-            else
-                printf "   %s" "$name"
+                hl="${BLACK}${BG_WHITE}"
             fi
+
+            printf "%s%s%s" "$PRFX" "$hl" "$name"
+            reset_color
+
         done
 
-        print_actions "[⇕] Move" "[⇔] Navigate" "[↵] Confirm" 2 "[Q] Quit"
+        # Überschüssige alte Zeilen löschen
+        for (( i=${#entries[@]} - offset; i < visible_count; i++ )); do
+            local line=$(( begin + i ))
+            tput cup $line 0; tput el
+        done
 
         # Eingabe lesen
         IFS= read -rsn1 key
@@ -67,29 +76,36 @@ select_folder() {
         fi
 
         case "$key" in
+
             $'\x1b[A')  # Hoch
                 (( pointer > 0 )) && ((pointer--))
                 ;;
+
             $'\x1b[B')  # Runter
                 (( pointer < ${#entries[@]} - 1 )) && ((pointer++))
                 ;;
+
             $'\x1b[C')  # Rechts (tiefer)
                 current_path="${entries[$pointer]}"
                 pointer=0
                 ;;
+
             $'\x1b[D')  # Links (zurück)
                 current_path="$(dirname "$current_path")"
                 pointer=0
                 ;;
+
             "")  # Enter
                 echo "$current_path"
                 return 0
                 ;;
+
             [qQ])
-                clear
-                exit 1
+                quit
                 ;;
+
         esac
+
     done
 
 }
