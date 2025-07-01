@@ -79,6 +79,9 @@ select_menu () {
         # Print options / menu actions
         print_actions "[↑/↓] Move" "[␣] Toggle" "[↵] Confirm" 2 "[Q] Quit" 1
 
+        # Print the program footer
+        print_footer
+
         # Read key input (with escape for arrow keys)
         IFS= read -rsn1 key
 
