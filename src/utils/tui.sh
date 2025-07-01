@@ -38,8 +38,7 @@ jump_content () {
 }
 
 set_line () {
-    local line="$1"
-    tput cup $line 0; tput el
+    tput cup $1 0; tput el
 }
 
 # Helper function to clear content
@@ -70,8 +69,7 @@ print_header () {
 # Displays some information such as name, version, author, etc.
 print_footer () {
 
-    local row=$(( ROWS - 1 ))
-    set_line $row
+    set_line $(( ROWS - 1 ))
 
     local credits="(c) 2025 [MIT] Paul Köhler (komed3) — FILECOME v0.1.0"
     local len=${#credits}
@@ -87,8 +85,7 @@ print_footer () {
 
 # Print a (underlined) title line
 print_title () {
-    local title="$1"
-    echo "$PRFX$S_ULINE$title$R_ULINE"; echo
+    printf "%s%s%s%s\n" "$PRFX" "${S_ULINE}" "$1" "${R_ULINE}"; echo
 }
 
 # Helper: Display action line
@@ -97,8 +94,7 @@ print_title () {
 # (2) optional color (e.g. 4 for blue)
 print_actions () {
 
-    local row=$(( ROWS - 3 ))
-    set_line $row
+    set_line $(( ROWS - 3 ))
 
     # List all options
     for (( i=1; i <= $#; i++ )); do

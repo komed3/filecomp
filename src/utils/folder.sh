@@ -43,39 +43,50 @@ select_folder () {
         printf "%sPath: %s%s" "$PRFX" "${YELLOW}" "$current_path"
         reset_color
 
-        # Read contents of the folder (directories only)
-        mapfile -t entries < <(find "$current_path" -mindepth 1 -maxdepth 1 -type d | sort)
+        # Read contents of the folder (directories only, with access check)
+        mapfile -t entries < <(find "$current_path" -mindepth 1 -maxdepth 1 -type d -readable -exec test -x {} \; -print | sort)
         local visible_count=$(( END - begin ))
 
         # Calculate start position of the display (for scroll effect)
         local offset=0
         (( pointer >= visible_count )) && offset=$(( pointer - visible_count + 1 ))
 
-        # Show visible entries
-        for (( i=0; i < visible_count; i++ )); do
+        # If there are no entries, show a message
+        if (( ${#entries[@]} == 0 )); then
 
-            local index=$(( i + offset ))
-            local line=$(( begin + i ))
-
-            set_line $line
-
-            [[ $index -ge ${#entries[@]} ]] && break
-
-            local name="$( basename "${entries[$index]}" )"
-
-            hl=""
-
-            if (( index == pointer )); then hl="${REV}"; fi
-
-            printf "%s%s%s" "$PRFX" "$hl" "$name"
+            set_line $begin
+            printf "%s%s(No accessible subdirectories)" "$PRFX" "${RED}"
             reset_color
 
-        done
+            (( offset-- ))
+
+        # Otherwise, show visible entries
+        else
+
+            for (( i=0; i < visible_count; i++ )); do
+
+                local index=$(( i + offset ))
+
+                set_line $(( begin + i ))
+
+                [[ $index -ge ${#entries[@]} ]] && break
+
+                local name="$( basename "${entries[$index]}" )"
+
+                hl=""
+
+                if (( index == pointer )); then hl="${REV}"; fi
+
+                printf "%s%s%s" "$PRFX" "$hl" "$name"
+                reset_color
+
+            done
+
+        fi
 
         # Delete old lines surplus to demand
         for (( i=${#entries[@]} - offset; i < visible_count; i++ )); do
-            local line=$(( begin + i ))
-            set_line $line
+            set_line $(( begin + i ))
         done
 
         # Read key input (with escape for arrow keys)
@@ -100,8 +111,7 @@ select_folder () {
 
             # Go deeper
             $'\x1b[C')
-                current_path="${entries[$pointer]}"
-                pointer=0
+                (( ${#entries[@]} > 0 )) && current_path="${entries[$pointer]}" && pointer=0
                 ;;
 
             # Come back a level
