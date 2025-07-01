@@ -57,22 +57,23 @@ select_menu () {
         # List all options
         for i in "${!opts_ref[@]}"; do
 
-            # Highlight cursor on current line
+            prefix=""
+
+            # Highlight current line
             if (( i == pointer )); then
-                cursor="${BOLD}  > ${RESET}"
-            else
-                cursor="    "
+                prefix="${BLACK}${BG_WHITE}"
             fi
 
-            # Mark with green "x" or empty depending on selection status
+            # Mark "x" or empty depending on selection status
             if (( selected[i] == 1 )); then
-                mark="${BOLD}x${RESET}"
+                mark="x"
             else
                 mark=" "
             fi
 
             # Print the line
-            printf "%s[%s] %s\n" "$cursor" "$mark" "${opts_ref[i]}"
+            printf "   %s[%s] %s\n" "$cursor" "$mark" "${opts_ref[i]}"
+            reset_color
 
         done
 
