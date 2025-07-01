@@ -63,18 +63,13 @@ select_menu () {
         # List all options
         for i in "${!opts_ref[@]}"; do
 
-            hl=""
-            mark=" "
+            hl=""; mark=" "
 
             # Highlight current line
-            if (( i == pointer )); then
-                hl="${REV}"
-            fi
+            if (( i == pointer )); then hl="${REV}"; fi
 
             # Mark "x" on selected option
-            if (( selected[i] == 1 )); then
-                mark="x"
-            fi
+            if (( selected[i] == 1 )); then mark="x"; fi
 
             # Print the line
             printf "%s%s[%s] %s\n" "$PRFX" "$hl" "$mark" "${opts_ref[i]}"
