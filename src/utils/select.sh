@@ -44,24 +44,23 @@ select_menu () {
         selected[i]=${init_ref[i]:-0}
     done
 
-    # Change terminal output (hide cursor, clean up on abort)
-    tput civis
-    trap "tput cnorm; clear; exit" SIGINT SIGTERM
-
     # Main loop
     while true; do
 
+        # Print the program header
+        print_header
+
         # Print the select menu title
-        clear; tput bold; echo "$title"; tput sgr0; echo
+        echo "$PRFX$title"; echo
 
         # List all options
         for i in "${!opts_ref[@]}"; do
 
-            prefix=""
+            hl=""
 
             # Highlight current line
             if (( i == pointer )); then
-                prefix="${BLACK}${BG_WHITE}"
+                hl="${BLACK}${BG_WHITE}"
             fi
 
             # Mark "x" or empty depending on selection status
@@ -72,7 +71,7 @@ select_menu () {
             fi
 
             # Print the line
-            printf "   %s[%s] %s\n" "$cursor" "$mark" "${opts_ref[i]}"
+            printf "%s%s[%s] %s\n" "$PRFX" "$hl" "$mark" "${opts_ref[i]}"
             reset_color
 
         done
