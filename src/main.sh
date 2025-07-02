@@ -3,11 +3,14 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "$SCRIPT_DIR/utils/tui.sh"
+source "$SCRIPT_DIR/utils/help.sh"
 source "$SCRIPT_DIR/utils/select.sh"
 source "$SCRIPT_DIR/utils/folder.sh"
 
-# Main program
+# The main program with all steps
 main () {
+
+    # PREPARE SCREEN
 
     # Clear and setup screen
     clear; setup_screen
@@ -18,7 +21,10 @@ main () {
     # Print the program footer
     print_footer
 
-    # Main programm
+    # MAIN PROGRAM
+
+    # Step 0: Show the intro / help screen
+    output_help
 
     # Step 1: select base directory
     select_folder "SELECT BASE DIRECTORY" "$HOME"
@@ -69,5 +75,5 @@ main () {
 
 }
 
-# Run the programm
+# Execute the programm
 main
