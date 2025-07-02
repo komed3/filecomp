@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$SCRIPT_DIR/utils/ui.sh"
+
 read_key () {
 
     local key rest seq
@@ -44,5 +46,13 @@ read_key () {
 
     # Catch all following inputs (e.g. if the button is held down)
     while IFS= read -rsn1 -t 0.001 _; do :; done
+
+}
+
+eval_key () {
+
+    case "$KEY" in
+        [qQ] ) quit ;;
+    esac
 
 }

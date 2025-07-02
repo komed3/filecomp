@@ -9,11 +9,13 @@ main () {
 
     setup_env
 
+    STEP=0
+
     while true; do
 
         KEY=$( read_key )
 
-        echo "$KEY"
+        eval_key
 
     done
 
