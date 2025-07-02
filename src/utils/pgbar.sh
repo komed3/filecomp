@@ -16,8 +16,8 @@ DRAW_INTERVAL_NS=50000000
 SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
 BAR_FILLER="■"
 BAR_EMPTY=" "
-_ROW=$(( ROWS - 5 ))
-_LEN=$(( COLS - 22 - ( LGAP * 2 ) ))
+ROW=$(( ROWS - 5 ))
+LEN=$(( COLS - 22 - ( LGAP * 2 ) ))
 
 # Status vars
 START_TIME=0
@@ -28,7 +28,7 @@ ETA="--:--:--"
 
 # Initialize the progress bar
 # Set start time, total items to count and reset spinner index
-progressbar_init () {
+pgbar_init () {
 
     START_TIME=$( date +%s )
     LAST_DRAW_NS=0
@@ -36,18 +36,18 @@ progressbar_init () {
     TOTAL_ITEMS=$1
     ETA="--:--:--"
 
-    progressbar_update 0
+    pgbar_update 0
 
 }
 
 # Hide / remove the progress bar
-progressbar_clear () {
-    set_line $_ROW
+pgbar_clear () {
+    set_line $ROW
 }
 
 # Update (draw) progress bar
 # Will automatically calculate ETA, progress and bar
-progressbar_update () {
+pgbar_update () {
 
     local now_ns=$( date +%s%N )
     local delta=$(( now_ns - LAST_DRAW_NS ))
@@ -77,11 +77,11 @@ progressbar_update () {
     fi
 
     # Calculate progress bar fill and empty parts
-    local fill=$(( pct * _LEN / 100 ))
-    local empty=$(( _LEN - fill ))
+    local fill=$(( pct * LEN / 100 ))
+    local empty=$(( LEN - fill ))
 
     # Clear the progress bar
-    progressbar_clear
+    pg_clear
 
     # Output the formatted progress bar
     printf "%s%s%s%s %3d%% [%s%s] ETA %s" \
@@ -93,7 +93,7 @@ progressbar_update () {
 }
 
 # Finalize progress bar / set to 100%
-progressbar_finish () {
+pg_finish () {
     LAST_DRAW_NS=0
-    progressbar_update $TOTAL_ITEMS; echo
+    pg_update $TOTAL_ITEMS; echo
 }
