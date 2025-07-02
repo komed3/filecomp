@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# --------------------------------------------------------------------------------
+# src/main.sh
+# Main Program
+#
+# This script is the main entry point for the file comparison program.
+# It orchestrates the user interface, handles user inputs, and manages the
+# comparison process.
+# --------------------------------------------------------------------------------
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "$SCRIPT_DIR/utils/tui.sh"
