@@ -10,6 +10,9 @@
 
 read_key () {
 
+    # Clear any pending input
+    while IFS= read -rs -n1 -t 0.01; do :; done
+
     # Read exactly one character in raw mode
     IFS= read -rs -n1 -d '' key
     
@@ -24,26 +27,9 @@ read_key () {
             "[B") echo "arrow_down" ;;
             "[C") echo "arrow_right" ;;
             "[D") echo "arrow_left" ;;
-            "[H") echo "home" ;;
-            "[F") echo "end" ;;
             "[5~") echo "page_up" ;;
             "[6~") echo "page_down" ;;
-            "[2~") echo "insert" ;;
-            "[3~") echo "delete" ;;
-            "[Z") echo "shift_tab" ;;
-            "OP") echo "f1" ;;
-            "OQ") echo "f2" ;;
-            "OR") echo "f3" ;;
-            "OS") echo "f4" ;;
-            "[15~") echo "f5" ;;
-            "[17~") echo "f6" ;;
-            "[18~") echo "f7" ;;
-            "[19~") echo "f8" ;;
-            "[20~") echo "f9" ;;
-            "[21~") echo "f10" ;;
-            "[23~") echo "f11" ;;
-            "[24~") echo "f12" ;;
-            *) echo "escape" ;;
+            *) echo 0 ;;
         esac
 
     else
@@ -52,10 +38,10 @@ read_key () {
         case "$key" in
             $'\t') echo "tab" ;;
             $'\n') echo "enter" ;;
-            $'\b') echo "backspace" ;;
+            $'\b'|$'\x7f') echo "backspace" ;;
             $' ') echo "space" ;;
-            [[:cntrl:]]) printf "ctrl_%s" "$(echo "$key" | tr -d '\0-\31')" ;;
-            *) echo "$key" ;;  # Regular character
+            [[:alnum:]]) echo "$key" ;;
+            *) echo 0 ;;
         esac
 
     fi
