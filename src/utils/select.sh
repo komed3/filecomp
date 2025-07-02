@@ -16,6 +16,7 @@
 # Array 'result' contains the selected indices
 # --------------------------------------------------------------------------------
 
+source ./src/utils/key.sh
 source ./src/utils/colors.sh
 source ./src/utils/tui.sh
 
@@ -78,27 +79,23 @@ select_menu () {
         done
 
         # Read key input (with escape for arrow keys)
-        IFS= read -rsn1 key
-
-        if [[ $key == $'\x1b' ]]; then
-            read -rsn2 rest; key+="$rest"
-        fi
+        key=$( read_key )
 
         # Parse key input
         case "$key" in
 
             # Navigate upwards
-            $'\x1b[A')
+            "arrow_up")
                 (( pointer = ( pointer - 1 + count ) % count ))
                 ;;
 
             # Navigate down
-            $'\x1b[B')
+            "arrow_down")
                 (( pointer = ( pointer + 1 ) % count ))
                 ;;
 
             # Toggle selection
-            " ")
+            "space")
                 if (( multi_flag == 0 )); then
                     # Radio: deselect all, then activate the current one
                     for (( j=0; j < count; j++ )); do selected[j]=0; done
@@ -115,7 +112,7 @@ select_menu () {
 
             # Enter: only continue if selection is valid
             # If input is required, beep on empty
-            "")
+            "enter")
                 if (( require_one == 1 )); then
                     local any=0
                     for v in "${selected[@]}"; do (( v == 1 )) && any=1; done

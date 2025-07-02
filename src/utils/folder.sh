@@ -10,6 +10,7 @@
 # -> Enter selects folder
 # --------------------------------------------------------------------------------
 
+source ./src/utils/key.sh
 source ./src/utils/colors.sh
 source ./src/utils/tui.sh
 
@@ -90,39 +91,35 @@ select_folder () {
         done
 
         # Read key input (with escape for arrow keys)
-        IFS= read -rsn1 key
-
-        if [[ $key == $'\x1b' ]]; then
-            read -rsn2 rest; key+="$rest"
-        fi
+        key=$( read_key )
 
         # Parse key input
         case "$key" in
 
             # Navigate upwards
-            $'\x1b[A')
+            "arrow_up")
                 (( pointer > 0 )) && (( pointer-- ))
                 ;;
 
             # Navigate down
-            $'\x1b[B')
+            "arrow_down")
                 (( pointer < ${#entries[@]} - 1 )) && (( pointer++ ))
                 ;;
 
             # Go deeper
-            $'\x1b[C')
+            "arrow_right")
                 (( ${#entries[@]} > 0 )) && current_path="${entries[$pointer]}" && pointer=0
                 ;;
 
             # Come back a level
-            $'\x1b[D')
+            "arrow_left")
                 current_path="$( dirname "$current_path" )"
                 pointer=0
                 ;;
 
             # Enter: get back the current (selected) directory
             # If within deepest directory, return current one
-            "")
+            "enter")
                 result="${entries[$pointer]:-$current_path}"
                 break
                 ;;
