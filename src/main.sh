@@ -6,6 +6,7 @@ source "$SCRIPT_DIR/utils/tui.sh"
 source "$SCRIPT_DIR/utils/help.sh"
 source "$SCRIPT_DIR/utils/select.sh"
 source "$SCRIPT_DIR/utils/folder.sh"
+source "$SCRIPT_DIR/utils/check.sh"
 
 # The main program with all steps
 main () {
@@ -57,8 +58,8 @@ main () {
     # Step 4.a: If desired, select directory to copy files to
     if (( outp_opt != 0 )) then
         select_folder "SELECT DIRECTORY FOR TO COPY UNIQUE FILES TO" "$HOME"
-        uniq_dir=${result}
-    else uniq_dir=""; fi
+        copy_dir=${result}
+    else copy_dir="-"; fi
 
     # Step 5: keep / delete hash database (default 'keep')
     hsdb_opts=( "Keep it" "Delete it" )
@@ -69,6 +70,9 @@ main () {
 
     hsdb_opt=${result[0]}
     hsdb_txt="${hsdb_opts[$hsdb_opt]}"
+
+    # Step 6: Check inputs made before run the comparison
+    check_options
 
     # Quit the program safely
     quit
