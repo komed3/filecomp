@@ -27,7 +27,7 @@ setup_env () {
 reset_env () {
 
     stty "$ENV_STTY"
-    tput srg0; tput cnorm
+    tput sgr0; tput cnorm
 
     clear; exit 0
 
@@ -73,5 +73,17 @@ print_footer () {
 
     set_line $(( $ROWS - 1 )) 0
     printf "%s%*s%s%s" "${REVID}" "$left" "" "$credits" "$RESET"
+
+}
+
+print_actions () {
+
+    local actions=( "$@" "[ENTER] Proceed" "[H]elp" "[Q]uit" )
+
+    set_line $(( $ROWS - 3 ))
+
+    for action in "${actions[@]}"; do
+        printf "%s%s%s  " "$REVID" "$action" "$RESET"
+    done
 
 }

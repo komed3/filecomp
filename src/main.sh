@@ -12,7 +12,7 @@ main () {
     print_header
     print_footer
 
-    STEP=0
+    PREV=0; STEP=0
 
     while true; do
 

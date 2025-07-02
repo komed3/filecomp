@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source "$SCRIPT_DIR/utils/ui.sh"
-
 read_key () {
 
     local key rest seq
@@ -52,8 +50,9 @@ read_key () {
 prog_control () {
 
     case "$KEY" in
-        "enter" )     (( STEP++ )) ;;
-        "backspace" ) (( STEP-- )) ;;
+        "enter" )     (( PREV=STEP )); (( STEP++ )) ;;
+        "backspace" ) (( STEP=PREV )) ;;
+        [hH] )        (( PREV=STEP )); (( STEP=0 )) ;;
         [qQ] )        quit ;;
     esac
 
