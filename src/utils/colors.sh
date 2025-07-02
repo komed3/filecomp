@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# General commands
+export RESET="$( tput sgr0 )"
+export REVID="$( tput rev )"
+
 # Foreground colors
 export BLACK="$( tput setaf 0 )"
 export RED="$( tput setaf 1 )"

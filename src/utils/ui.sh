@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$SCRIPT_DIR/utils/colors.sh"
+
 export COLS=$( tput cols )
 export ROWS=$( tput lines )
 
@@ -25,7 +27,7 @@ setup_env () {
 reset_env () {
 
     stty "$ENV_STTY"
-    tput cnorm
+    tput srg0; tput cnorm
 
     clear; exit 0
 
@@ -40,7 +42,7 @@ jump_content () {
 }
 
 set_line () {
-    tput cup $1 0; tput el
+    tput cup $1 ${2:-$LGAP}; tput el
 }
 
 clear_content () {
@@ -54,12 +56,22 @@ repeat_char () {
 
 print_header () {
 
+    local left=$(( ( $COLS - 10 ) / 2 ))
+    local right=$(( $COLS - $left - 10 ))
 
+    set_line 0 0
+    printf "%s%*s%s" "$REVID" "$left" "" "$RESET"
+    printf " FILECOMP "
+    printf "%s%*s%s" "$REVID" "$right" "" "$RESET"
 
 }
 
 print_footer () {
 
+    local credits="(c) 2025 [MIT] Paul Köhler (komed3) — FILECOME v0.1.0"
+    local left=$(( $COLS - ${#credits} ))
 
+    set_line $(( $ROWS - 1 )) 0
+    printf "%s%*s%s%s" "${REVID}" "$left" "" "$credits" "$RESET"
 
 }
