@@ -8,8 +8,8 @@
 # (ETA). It displays in full color with a Braille spinner and a filled bar.
 # --------------------------------------------------------------------------------
 
-source ./src/utils/colors.sh
-source ./src/utils/tui.sh
+source "$SCRIPT_DIR/utils/colors.sh"
+source "$SCRIPT_DIR/utils/tui.sh"
 
 # Progress bar config
 DRAW_INTERVAL_NS=50000000

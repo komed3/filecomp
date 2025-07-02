@@ -10,9 +10,9 @@
 # -> Enter selects folder
 # --------------------------------------------------------------------------------
 
-source ./src/utils/key.sh
-source ./src/utils/colors.sh
-source ./src/utils/tui.sh
+source "$SCRIPT_DIR/utils/key.sh"
+source "$SCRIPT_DIR/utils/colors.sh"
+source "$SCRIPT_DIR/utils/tui.sh"
 
 select_folder () {
 

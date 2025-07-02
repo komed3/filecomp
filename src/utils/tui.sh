@@ -8,7 +8,7 @@
 # headers, footers, handling actions, and managing terminal output.
 # --------------------------------------------------------------------------------
 
-source ./src/utils/colors.sh
+source "$SCRIPT_DIR/utils/colors.sh"
 
 # Terminal dimensions
 export COLS=$( tput cols )
