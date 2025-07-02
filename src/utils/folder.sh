@@ -127,22 +127,26 @@ select_folder () {
 
             # Navigate upwards
             "arrow_up")
-                if (( pointer > 0 )); then (( pointer-- )); else tput bel; fi
+                if (( pointer > 0 )); then (( pointer-- ));
+                else tput bel; fi
                 ;;
 
             # Navigate down
             "arrow_down")
-                if (( pointer < total - 1 )); then (( pointer++ )); else tput bel; fi
+                if (( pointer < total - 1 )); then (( pointer++ ));
+                else tput bel; fi
                 ;;
 
             # Go to prev page
             "page_up")
-                (( pointer - visible >= 0 )) && (( pointer -= visible )) || { pointer=0; tput bel; }
+                if (( page > 0 )); then pointer=$(( ( page - 1 ) * visible ));
+                else tput bel; fi
                 ;;
 
             # Go to next page
             "page_down")
-                (( pointer + visible < total )) && (( pointer += visible )) || { pointer=$(( total - 1 )); tput bel; }
+                if (( page + 1 < pages )); then pointer=$(( ( page + 1 ) * visible ))
+                else pointer=$(( total - 1 )); tput bel; fi
                 ;;
 
             # Go deeper
