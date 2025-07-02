@@ -47,6 +47,7 @@ select_folder () {
 
         local total=${#entries[@]}
         local pages=$(( ( total + visible - 1 ) / visible ))
+        (( pages == 0 )) && pages=1
 
         # Pointer bounds check
         (( pointer < 0 )) && pointer=0
@@ -57,9 +58,9 @@ select_folder () {
 
         # Print the current path with page info
         set_line $current
-        printf "%sPath: %s%s%s [%d/%d]" \
+        printf "%sPath: %s%s%s   page %d of %d" \
             "$PRFX" "${YELLOW}" "$current_path" "${RESET}" \
-            "$(( page + 1 ))" "$pages"
+            "$(( page + 1 ))" "${pages}"
 
         # If no entries found
         if (( total == 0 )); then
