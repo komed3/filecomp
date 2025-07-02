@@ -15,7 +15,6 @@ read_key () {
     local key rest seq
 
     # Read raw terminal inputs
-    stty -icanon -echo min 1 time 0
     IFS= read -rsn1 key 2>/dev/null || return
 
     # Escape sequence (arrow, function keys)

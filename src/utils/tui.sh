@@ -18,17 +18,22 @@ export END=$(( ROWS - 7 ))
 export PRFX="  "
 export LGAP=2
 
-# Change terminal output and clears it
-# Hide cursor, clean up on abort
+# Setup the terminal for TUI
+# Configures the terminal for a text-based user interface (TUI).
+# Disables canonical mode and echo, hides the cursor, and sets up
+# a trap to reset the terminal on exit or interruption.
 setup_screen () {
 
     STTY=$( stty -g )
 
     trap 'reset_screen' INT TERM EXIT
+
+    stty -icanon -echo min 1 time 0
     tput civis
 
 }
 
+# Reset the terminal to its original state
 reset_screen () {
 
     stty "$STTY"
