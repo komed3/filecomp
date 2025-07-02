@@ -11,6 +11,7 @@
 source ./src/utils/tui.sh
 
 # Progress bar config
+DRAW_INTERVAL_NS=50000000
 SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
 BAR_FILLER="#"
 BAR_EMPTY=" "
@@ -21,6 +22,7 @@ _LEN=$(( COLS - 22 - ( LGAP * 2 ) ))
 START_TIME=0
 SPINNER_INDEX=0
 TOTAL_ITEMS=0
+LAST_DRAW_NS=0
 
 # Initialize the progress bar
 # Set start time, total items to count and reset spinner index
@@ -29,6 +31,7 @@ progressbar_init () {
     START_TIME=$( date +%s )
     SPINNER_INDEX=0
     TOTAL_ITEMS=$1
+    LAST_DRAW_NS=0
 
     progressbar_update 0
 
@@ -43,9 +46,16 @@ progressbar_clear () {
 # Will automatically calculate ETA, progress and bar
 progressbar_update () {
 
+    local now_ns=$( date +%s%N )
+    local delta=$(( now_ns - LAST_DRAW_NS ))
+
+    if (( delta < DRAW_INTERVAL_NS )); then return; fi
+
+    LAST_DRAW_NS=$now_ns
+
     # Calculate the current progress
-    local now=$( date +%s )
-    local elapsed=$(( now - START_TIME ))
+    local now_s=$( date +%s )
+    local elapsed=$(( now_s - START_TIME ))
     local cur=$1
 
     # Get the current spinner character
@@ -80,5 +90,9 @@ progressbar_update () {
 
 # Finalize progress bar / set to 100%
 progressbar_finish () {
+
+    LAST_DRAW_NS=0
+
     progressbar_update $TOTAL; echo
+
 }
