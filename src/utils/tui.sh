@@ -22,14 +22,25 @@ export LGAP=2
 # Hide cursor, clean up on abort
 setup_screen () {
 
-    trap "tput cnorm; clear; exit" SIGINT SIGTERM
+    STTY=$( stty -g )
+
+    trap 'reset_screen' INT TERM EXIT
     tput civis
+
+}
+
+reset_screen () {
+
+    stty "$STTY"
+    tput cnorm
+    
+    clear; exit 0
 
 }
 
 # Quit the program safely
 quit () {
-    tput cnorm; clear; exit 1
+    reset_screen
 }
 
 # Helper to jump to the right cell for content
