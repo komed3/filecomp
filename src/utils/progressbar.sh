@@ -14,7 +14,7 @@ source ./src/utils/tui.sh
 # Progress bar config
 DRAW_INTERVAL_NS=50000000
 SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
-BAR_FILLER="█"
+BAR_FILLER="■"
 BAR_EMPTY=" "
 _ROW=$(( ROWS - 5 ))
 _LEN=$(( COLS - 22 - ( LGAP * 2 ) ))
@@ -24,6 +24,7 @@ START_TIME=0
 LAST_DRAW_NS=0
 SPINNER_INDEX=0
 TOTAL_ITEMS=0
+ETA="--:--:--"
 
 # Initialize the progress bar
 # Set start time, total items to count and reset spinner index
@@ -33,6 +34,7 @@ progressbar_init () {
     LAST_DRAW_NS=0
     SPINNER_INDEX=0
     TOTAL_ITEMS=$1
+    ETA="--:--:--"
 
     progressbar_update 0
 
@@ -68,11 +70,10 @@ progressbar_update () {
 
     # Calculate the percentage and remaining time
     local pct=$(( cur * 100 / TOTAL_ITEMS ))
-    local clk="--:--:--"
 
-    if (( cur > 0 )); then
+    if (( SPINNER_INDEX % 50 == 0 && cur > 0 )); then
         local eta=$(( elapsed * ( TOTAL_ITEMS - cur ) / cur ))
-        clk=$( date -u -d "@$eta" +%H:%M:%S )
+        ETA=$( date -u -d "@$eta" +%H:%M:%S )
     fi
 
     # Calculate progress bar fill and empty parts
@@ -87,15 +88,12 @@ progressbar_update () {
         "$PRFX" "${CYAN}" "$spinner" "${RESET}" "$pct" \
         "$( repeat_char "$BAR_FILLER" $fill )" \
         "$( repeat_char "$BAR_EMPTY" $empty )" \
-        "$clk"
+        "$ETA"
 
 }
 
 # Finalize progress bar / set to 100%
 progressbar_finish () {
-
     LAST_DRAW_NS=0
-
     progressbar_update $TOTAL_ITEMS; echo
-
 }
