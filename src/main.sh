@@ -16,6 +16,7 @@ source "$SCRIPT_DIR/utils/help.sh"
 source "$SCRIPT_DIR/utils/select.sh"
 source "$SCRIPT_DIR/utils/folder.sh"
 source "$SCRIPT_DIR/utils/check.sh"
+source "$SCRIPT_DIR/hashdb.sh"
 
 # The main program with all steps
 main () {
@@ -82,6 +83,9 @@ main () {
 
     # Step 6: Check inputs made before run the comparison
     check_options
+
+    # Step 7: Create the hash database
+    build_hash_db "$base_dir" "$hash_txt"
 
     # Quit the program safely
     quit
