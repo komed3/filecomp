@@ -15,8 +15,9 @@ export COLS=$( tput cols )
 export ROWS=$( tput lines )
 export START=2
 export END=$(( ROWS - 7 ))
-export PRFX="  "
 export LGAP=2
+export PRFX="  "
+export LENGTH=$(( COLS - ( LGAP * 2 ) ))
 
 # Setup the terminal for TUI
 # Configures the terminal for a text-based user interface (TUI).

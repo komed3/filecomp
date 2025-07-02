@@ -17,7 +17,7 @@ SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
 BAR_FILLER="■"
 BAR_EMPTY=" "
 ROW=$(( ROWS - 5 ))
-LEN=$(( COLS - 22 - ( LGAP * 2 ) ))
+LEN=$(( LENGTH - 22 ))
 
 # Status vars
 START_TIME=0

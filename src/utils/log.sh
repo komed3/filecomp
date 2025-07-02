@@ -48,6 +48,12 @@ update_log () {
         local line=$(( LOG_START + i ))
         local msg="${LOG_LINES[$i]}"
 
+        # Truncate overly long lines (middle ellipsis)
+        if (( ${#msg} > LENGTH )); then
+            local half=$(( ( LENGTH - 1 ) / 2 ))
+            msg="${msg:0:$half}…${msg: -$half}"
+        fi
+
         set_line $line
 
         # Print the line
