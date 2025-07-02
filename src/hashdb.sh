@@ -90,9 +90,11 @@ build_hash_db () {
 
                 local hash_value="${hash_output%% *}"
 
+                # Log the hashed file
                 echo "$hash_value $file" >> "$temp_hash_db"
                 update_log "Indexed: $file"
 
+            # If the hashing failed, log it
             else update_log "Failed: $file"; fi
 
             # Update progress bar
