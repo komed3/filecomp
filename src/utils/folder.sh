@@ -17,7 +17,7 @@ source "$SCRIPT_DIR/utils/tui.sh"
 # Set display range
 PG_START=$(( START + 3 ))
 PG_END=$(( END ))
-PG_MAX=$(( PG_END - PG_START ))
+PG_MAX=$(( PG_END - PG_START + 1 ))
 PATH_LINE=$(( START + 1 ))
 
 select_folder () {

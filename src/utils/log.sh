@@ -4,9 +4,10 @@
 # src/utils/log.sh
 # Log Output (Live Log View)
 #
-# Provides a scrollable, color-coded log window in the TUI. New lines are
-# added at the bottom. If maximum lines reached, oldest lines are removed to
-# simulate scroll behavior.
+# Provides a scrollable log window in the TUI.
+#
+# New lines are added at the bottom. If maximum lines reached, oldest lines
+# are removed to simulate scroll behavior.
 # --------------------------------------------------------------------------------
 
 source "$SCRIPT_DIR/utils/colors.sh"
@@ -18,7 +19,7 @@ LOG_LINES=()
 # Set display range
 LOG_START=$(( START + 2 ))
 LOG_END=$(( END ))
-LOG_MAX=$(( LOG_END - LOG_START ))
+LOG_MAX=$(( LOG_END - LOG_START + 1 ))
 
 # Clear the log view entirely
 clear_log () {
@@ -27,22 +28,18 @@ clear_log () {
 }
 
 # Add a new line to the live log
-# $1 - Line content
-# $2 - Optional color index
 update_log () {
 
-    local text="$1"
-    local color=$2
-
     # Append to buffer
-    LOG_LINES+=( "$text" )
+    LOG_LINES+=( "$1" )
 
     # Remove oldest if over capacity
-    if (( ${#LOG_LINES[@]} >= LOG_MAX )); then
+    while (( ${#LOG_LINES[@]} > LOG_MAX )); do
         LOG_LINES=( "${LOG_LINES[@]:1}" )
-    fi
+    done
 
     # Draw updated log
+    local i
     for (( i=0; i < ${#LOG_LINES[@]}; i++ )); do
 
         local line=$(( LOG_START + i ))
@@ -54,10 +51,8 @@ update_log () {
             msg="${msg:0:$half}…${msg: -$half}"
         fi
 
-        set_line $line
-
         # Print the line
-        printf "%s%s" "$PRFX" "$( color_output "$msg" $color )"
+        set_line $line; printf "%s%s" "$PRFX" "$msg"
 
     done
 

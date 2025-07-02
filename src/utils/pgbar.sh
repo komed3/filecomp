@@ -14,7 +14,7 @@ source "$SCRIPT_DIR/utils/tui.sh"
 # Progress bar config
 DRAW_INTERVAL_NS=50000000
 SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
-BAR_FILLER="■"
+BAR_FILLER="#"
 BAR_EMPTY=" "
 ROW=$(( ROWS - 5 ))
 LEN=$(( LENGTH - 22 ))
@@ -81,7 +81,7 @@ pgbar_update () {
     local empty=$(( LEN - fill ))
 
     # Clear the progress bar
-    pg_clear
+    pgbar_clear
 
     # Output the formatted progress bar
     printf "%s%s%s%s %3d%% [%s%s] ETA %s" \
@@ -93,7 +93,7 @@ pgbar_update () {
 }
 
 # Finalize progress bar / set to 100%
-pg_finish () {
+pgbar_finish () {
     LAST_DRAW_NS=0
-    pg_update $TOTAL_ITEMS; echo
+    pgbar_update $TOTAL_ITEMS; echo
 }
