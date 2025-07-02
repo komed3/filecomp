@@ -9,13 +9,16 @@ main () {
 
     setup_env
 
+    print_header
+    print_footer
+
     STEP=0
 
     while true; do
 
         KEY=$( read_key )
 
-        eval_key
+        prog_control
 
     done
 

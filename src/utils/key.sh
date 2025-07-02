@@ -49,10 +49,12 @@ read_key () {
 
 }
 
-eval_key () {
+prog_control () {
 
     case "$KEY" in
-        [qQ] ) quit ;;
+        "enter" )     (( STEP++ )) ;;
+        "backspace" ) (( STEP-- )) ;;
+        [qQ] )        quit ;;
     esac
 
 }
