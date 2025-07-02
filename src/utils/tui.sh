@@ -63,6 +63,13 @@ clear_content () {
     jump_content
 }
 
+# Repeat a character multiple times
+# $1 - Character to repeat
+# $2 - Number of times to repeat
+repeat_char () {
+    for (( i=0; i < $2; i++ )); do printf "%s" "$1"; done
+}
+
 # Program header
 # Displays the header with the program name
 print_header () {

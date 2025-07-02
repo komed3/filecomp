@@ -8,30 +8,31 @@
 # (ETA). It displays in full color with a Braille spinner and a filled bar.
 # --------------------------------------------------------------------------------
 
+source ./src/utils/colors.sh
 source ./src/utils/tui.sh
 
 # Progress bar config
 DRAW_INTERVAL_NS=50000000
 SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
-BAR_FILLER="#"
+BAR_FILLER="█"
 BAR_EMPTY=" "
 _ROW=$(( ROWS - 5 ))
 _LEN=$(( COLS - 22 - ( LGAP * 2 ) ))
 
 # Status vars
 START_TIME=0
+LAST_DRAW_NS=0
 SPINNER_INDEX=0
 TOTAL_ITEMS=0
-LAST_DRAW_NS=0
 
 # Initialize the progress bar
 # Set start time, total items to count and reset spinner index
 progressbar_init () {
 
     START_TIME=$( date +%s )
+    LAST_DRAW_NS=0
     SPINNER_INDEX=0
     TOTAL_ITEMS=$1
-    LAST_DRAW_NS=0
 
     progressbar_update 0
 
@@ -78,12 +79,14 @@ progressbar_update () {
     local fill=$(( pct * _LEN / 100 ))
     local empty=$(( _LEN - fill ))
 
-    # Output the formatted progress bar
+    # Clear the progress bar
     progressbar_clear
-    printf "%s%s %3d%% [%s%s] ETA %s" \
-        "$PRFX" "$spinner" "$pct" \
-        "$(printf "%${fill}s" | tr ' ' "$BAR_FILLER")" \
-        "$(printf "%${empty}s" | tr ' ' "$BAR_EMPTY")" \
+
+    # Output the formatted progress bar
+    printf "%s%s%s%s %3d%% [%s%s] ETA %s" \
+        "$PRFX" "${CYAN}" "$spinner" "${RESET}" "$pct" \
+        "$( repeat_char "$BAR_FILLER" $fill )" \
+        "$( repeat_char "$BAR_EMPTY" $empty )" \
         "$clk"
 
 }
@@ -93,6 +96,6 @@ progressbar_finish () {
 
     LAST_DRAW_NS=0
 
-    progressbar_update $TOTAL; echo
+    progressbar_update $TOTAL_ITEMS; echo
 
 }
