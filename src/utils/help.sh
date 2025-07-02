@@ -2,7 +2,7 @@
 
 # --------------------------------------------------------------------------------
 # src/utils/help.sh
-# Help
+# Intro / Help
 #
 # This file will show the help / intro screen for the file comparison program.
 # It is used to display the options and actions available in the program.

@@ -67,14 +67,13 @@ select_menu () {
             hl=""; mark=" "
 
             # Highlight current line
-            if (( i == pointer )); then hl="${REV}"; fi
+            if (( i == pointer )); then hl="$REV"; fi
 
             # Mark "x" on selected option
             if (( selected[i] == 1 )); then mark="x"; fi
 
             # Print the line
-            printf "%s%s[%s] %s\n" "$PRFX" "$hl" "$mark" "${opts_ref[i]}"
-            reset_color
+            printf "%s%s[%s] %s%s\n" "$PRFX" "$hl" "$mark" "${opts_ref[i]}" "$RESET"
 
         done
 

@@ -108,7 +108,7 @@ print_footer () {
 
 # Print a (underlined) title line
 print_title () {
-    printf "%s%s%s%s\n" "$PRFX" "${S_ULINE}" "$1" "${R_ULINE}"; echo
+    printf "%s%s%s%s\n" "$PRFX" "$S_ULINE" "$1" "$R_ULINE"; echo
 }
 
 # Helper: Display action line

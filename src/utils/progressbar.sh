@@ -85,7 +85,7 @@ progressbar_update () {
 
     # Output the formatted progress bar
     printf "%s%s%s%s %3d%% [%s%s] ETA %s" \
-        "$PRFX" "${CYAN}" "$spinner" "${RESET}" "$pct" \
+        "$PRFX" "$CYAN" "$spinner" "$RESET" "$pct" \
         "$( repeat_char "$BAR_FILLER" $fill )" \
         "$( repeat_char "$BAR_EMPTY" $empty )" \
         "$ETA"

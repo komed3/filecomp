@@ -60,15 +60,14 @@ select_folder () {
         # Print the current path with page info
         set_line $current
         printf "%sPath: %s%s%s   page %d of %d" \
-            "$PRFX" "${YELLOW}" "$current_path" "${RESET}" \
+            "$PRFX" "$YELLOW" "$current_path" "$RESET" \
             "$(( page + 1 ))" "${pages}"
 
         # If no entries found
         if (( total == 0 )); then
 
             set_line $begin
-            printf "%s%s(No accessible subdirectories)" "$PRFX" "${RED}"
-            reset_color
+            printf "%s%s(No accessible subdirectories)%s" "$PRFX" "$RED" "$RESET"
 
             for (( i=1; i < visible; i++ )); do
                 set_line $(( begin + i ))
@@ -90,10 +89,9 @@ select_folder () {
 
                         hl=""
 
-                        if (( index == pointer )); then hl="${REV}"; fi
+                        if (( index == pointer )); then hl="$REV"; fi
 
-                        printf "%s%s%s" "$PRFX" "$hl" "$name"
-                        reset_color
+                        printf "%s%s%s%s" "$PRFX" "$hl" "$name" "$RESET"
 
                     fi
 
@@ -111,8 +109,7 @@ select_folder () {
                 fi
 
                 set_line $new_line
-                printf "%s%s%s" "$PRFX" "${REV}" "$( basename "${entries[$pointer]}" )"
-                reset_color
+                printf "%s%s%s%s" "$PRFX" "$REV" "$( basename "${entries[$pointer]}" )" "$RESET"
 
             fi
 
