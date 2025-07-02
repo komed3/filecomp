@@ -34,7 +34,7 @@ select_folder () {
     clear_content; print_title "$title"
 
     # Print options / menu actions
-    print_actions "[⇕] Navigate" "[⇔] Change directory" "[↵] Confirm" 2 "[Q] Quit"
+    print_actions "[UP/DN] Navigate" "[LF/RT] Change directory" "[PGUP/PGDN] Pages" "[ENTER] OK" 2 "[Q] Quit"
 
     # The main loop
     while true; do

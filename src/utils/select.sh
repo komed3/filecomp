@@ -49,7 +49,7 @@ select_menu () {
     clear_content
 
     # Print options / menu actions
-    print_actions "[⇕] Move" "[␣] Toggle" "[↵] Confirm" 2 "[Q] Quit"
+    print_actions "[UP/DN] Move" "[SPACE] Toggle" "[ENTER] OK" 2 "[Q] Quit"
 
     # The main loop
     # Show options list and proceed user inputs
