@@ -18,7 +18,7 @@ check_options () {
     clear_content
 
     # Print options / menu actions
-    print_actions "[ENTER] Proceed and do the job" 2 "[Q] Quit"
+    print_actions "[ENTER] Proceed" 2 "[Q] Quit"
 
     # The main loop
     # Check inputs made before run the comparison
@@ -31,12 +31,12 @@ check_options () {
         print_title "CHECK YOUR INPUTS BEFORE PROCEED"
 
         local check_label=(
-          "Base directory "
-          "Compare with   "
-          "Copy unique to?"
-          "Hash algorithm "
-          "Output option  "
-          "Hash database  "
+          "Base directory"
+          "Compare with  "
+          "Copy unique to"
+          "Hash algorithm"
+          "Output option "
+          "Hash database "
         )
         local check_value=(
           "$base_dir"
