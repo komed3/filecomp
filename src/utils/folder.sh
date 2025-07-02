@@ -53,6 +53,7 @@ select_folder () {
         (( pointer < 0 )) && pointer=0
         (( pointer >= total )) && pointer=$(( total > 0 ? total - 1 : 0 ))
 
+        # Calculate current page and offset
         page=$(( pointer / visible ))
         local offset=$(( page * visible ))
 
@@ -117,14 +118,12 @@ select_folder () {
 
         fi
 
+        # Store last pointer pos. and page
         last_pointer=$pointer
         last_page=$page
 
-        # Read key input (with escape for arrow keys)
-        key=$( read_key )
-
         # Parse key input
-        case "$key" in
+        case "$( read_key )" in
 
             # Navigate upwards
             "arrow_up")

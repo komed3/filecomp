@@ -78,11 +78,8 @@ select_menu () {
 
         done
 
-        # Read key input (with escape for arrow keys)
-        key=$( read_key )
-
         # Parse key input
-        case "$key" in
+        case "$( read_key )" in
 
             # Navigate upwards
             "arrow_up")
