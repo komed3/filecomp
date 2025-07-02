@@ -20,10 +20,14 @@ select_folder () {
     local title="$1"
     local current=$(( START + 1 ))
     local begin=$(( START + 3 ))
+    local visible=$(( END - begin ))
     local current_path="$2"
     local entries
 
+    local page=0
+    local last_page=-1
     local pointer=0
+    local last_pointer=-1
     local key
 
     # Clear previous content and print title
@@ -33,62 +37,87 @@ select_folder () {
     print_actions "[⇕] Navigate" "[⇔] Change directory" "[↵] Confirm" 2 "[Q] Quit"
 
     # The main loop
-    # Show list of directories
     while true; do
 
         # Jump to content
         jump_content
 
-        # Print the current path
-        set_line $current
-        printf "%sPath: %s%s" "$PRFX" "${YELLOW}" "$current_path"
-        reset_color
-
         # Read contents of the folder (directories only, with access check)
         mapfile -t entries < <(find "$current_path" -mindepth 1 -maxdepth 1 -type d -readable -exec test -x {} \; -print | sort)
-        local visible_count=$(( END - begin ))
 
-        # Calculate start position of the display (for scroll effect)
-        local offset=0
-        (( pointer >= visible_count )) && offset=$(( pointer - visible_count + 1 ))
+        local total=${#entries[@]}
+        local pages=$(( ( total + visible - 1 ) / visible ))
 
-        # If there are no entries, show a message
-        if (( ${#entries[@]} == 0 )); then
+        # Pointer bounds check
+        (( pointer < 0 )) && pointer=0
+        (( pointer >= total )) && pointer=$(( total > 0 ? total - 1 : 0 ))
+
+        page=$(( pointer / visible ))
+        local offset=$(( page * visible ))
+
+        # Print the current path with page info
+        set_line $current
+        printf "%sPath: %s%s%s [%d/%d]" \
+            "$PRFX" "${YELLOW}" "$current_path" "${RESET}" \
+            "$(( page + 1 ))" "$pages"
+
+        # If no entries found
+        if (( total == 0 )); then
 
             set_line $begin
             printf "%s%s(No accessible subdirectories)" "$PRFX" "${RED}"
             reset_color
 
-            (( offset-- ))
+            for (( i=1; i < visible; i++ )); do
+                set_line $(( begin + i ))
+            done
 
-        # Otherwise, show visible entries
         else
 
-            for (( i=0; i < visible_count; i++ )); do
+            # Page break or initial display
+            if (( page != last_page )); then
 
-                local index=$(( i + offset ))
+                for (( i=0; i < visible; i++ )); do
 
-                set_line $(( begin + i ))
+                    local index=$(( offset + i ))
+                    set_line $(( begin + i ))
 
-                [[ $index -ge ${#entries[@]} ]] && break
+                    if (( index < total )); then
 
-                local name="$( basename "${entries[$index]}" )"
+                        local name="$( basename "${entries[$index]}" )"
 
-                hl=""
+                        hl=""
 
-                if (( index == pointer )); then hl="${REV}"; fi
+                        if (( index == pointer )); then hl="${REV}"; fi
 
-                printf "%s%s%s" "$PRFX" "$hl" "$name"
+                        printf "%s%s%s" "$PRFX" "$hl" "$name"
+                        reset_color
+
+                    fi
+
+                done
+
+            # Update only two lines (same page)
+            elif (( pointer != last_pointer )); then
+
+                local old_line=$(( begin + ( last_pointer % visible ) ))
+                local new_line=$(( begin + ( pointer % visible ) ))
+
+                if (( last_pointer >= 0 && last_pointer < total )); then
+                    set_line $old_line
+                    printf "%s%s" "$PRFX" "$( basename "${entries[$last_pointer]}" )"
+                fi
+
+                set_line $new_line
+                printf "%s%s%s" "$PRFX" "${REV}" "$( basename "${entries[$pointer]}" )"
                 reset_color
 
-            done
+            fi
 
         fi
 
-        # Delete old lines surplus to demand
-        for (( i=${#entries[@]} - offset; i < visible_count; i++ )); do
-            set_line $(( begin + i ))
-        done
+        last_pointer=$pointer
+        last_page=$page
 
         # Read key input (with escape for arrow keys)
         key=$( read_key )
@@ -98,23 +127,38 @@ select_folder () {
 
             # Navigate upwards
             "arrow_up")
-                (( pointer > 0 )) && (( pointer-- ))
+                if (( pointer > 0 )); then (( pointer-- )); else tput bel; fi
                 ;;
 
             # Navigate down
             "arrow_down")
-                (( pointer < ${#entries[@]} - 1 )) && (( pointer++ ))
+                if (( pointer < total - 1 )); then (( pointer++ )); else tput bel; fi
+                ;;
+
+            # Go to prev page
+            "page_up")
+                (( pointer - visible >= 0 )) && (( pointer -= visible )) || { pointer=0; tput bel; }
+                ;;
+
+            # Go to next page
+            "page_down")
+                (( pointer + visible < total )) && (( pointer += visible )) || { pointer=$(( total - 1 )); tput bel; }
                 ;;
 
             # Go deeper
             "arrow_right")
-                (( ${#entries[@]} > 0 )) && current_path="${entries[$pointer]}" && pointer=0
+                if (( total > 0 )); then
+                    current_path="${entries[$pointer]}"
+                    pointer=0; last_page=-1; last_pointer=-1
+                else tput bel; fi
                 ;;
 
             # Come back a level
             "arrow_left")
-                current_path="$( dirname "$current_path" )"
-                pointer=0
+                if [[ "$current_path" != "/" ]]; then
+                    current_path="$( dirname "$current_path" )"
+                    pointer=0; last_page=-1; last_pointer=-1
+                else tput bel; fi
                 ;;
 
             # Enter: get back the current (selected) directory
