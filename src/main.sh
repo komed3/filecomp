@@ -20,9 +20,17 @@ main () {
 
     # Main programm
 
-    # Step 1: select hash algorithm (default 'SHA1')
-    hash_opts=( "SHA1" "SHA256" "MD5" )
-    hash_init=( 1 0 0 )
+    # Step 1: select base directory
+    select_folder "SELECT BASE DIRECTORY" "$HOME"
+    base_dir=${result}
+
+    # Step 2: select directory to compare
+    select_folder "SELECT DIRECTORY TO COMPARE" "$HOME"
+    comp_dir=${result}
+
+    # Step 3: select hash algorithm (default 'SHA1')
+    hash_opts=( "SHA1" "SHA256" "MD5" "B2SUM" )
+    hash_init=( 1 0 0 0 )
 
     select_menu "SELECT HASH ALGORITHM FOR COMPARING FILES" \
         0 1 0 hash_opts hash_init
@@ -30,7 +38,7 @@ main () {
     hash_opt=${result[0]}
     hash_txt="${hash_opts[$hash_opt]}"
 
-    # Step 2: select output option (default 'log')
+    # Step 4: select output option (default 'log')
     outp_opts=( "Write files to log" "Copy files to new directory" "Both options" )
     outp_init=( 1 0 0 )
 
@@ -40,7 +48,13 @@ main () {
     outp_opt=${result[0]}
     outp_txt="${outp_opts[$outp_opt]}"
 
-    # Step 3: keep / delete hash database (default 'keep')
+    # Step 4.a: If desired, select directory to copy files to
+    if (( outp_opt != 0 )) then
+        select_folder "SELECT DIRECTORY FOR TO COPY UNIQUE FILES TO" "$HOME"
+        uniq_dir=${result}
+    else uniq_dir=""; fi
+
+    # Step 5: keep / delete hash database (default 'keep')
     hsdb_opts=( "Keep it" "Delete it" )
     hsdb_init=( 1 0 )
 
