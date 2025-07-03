@@ -83,7 +83,7 @@ print_title () {
 
 print_actions () {
 
-    local actions=( "$@" "[ENTER] Proceed" "[H]elp" "[Q]uit" )
+    local actions=( "$@" "[ENTER] Proceed" "[H] Help" "[Q] Quit" )
 
     set_line $(( $ROWS - 3 ))
 

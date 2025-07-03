@@ -18,12 +18,12 @@ read_key () {
 
         # Parse special keys
         case "$key" in
-            $'\e[A' ) KEY="arrow_up" ;;
-            $'\e[B' ) KEY="arrow_down" ;;
-            $'\e[C' ) KEY="arrow_right" ;;
-            $'\e[D' ) KEY="arrow_left" ;;
-            $'\e[5' ) KEY="page_up" ;;
-            $'\e[6' ) KEY="page_down" ;;
+            $'\e[A' ) KEY="up" ;;
+            $'\e[B' ) KEY="down" ;;
+            $'\e[C' ) KEY="right" ;;
+            $'\e[D' ) KEY="left" ;;
+            $'\e[5' ) KEY="prev" ;;
+            $'\e[6' ) KEY="next" ;;
         esac
 
     else
@@ -33,25 +33,13 @@ read_key () {
         case "$key" in
             $' ' )           KEY="space" ;;
             $'\n'|$'\r'|"" ) KEY="enter" ;;
-            $'\b'|$'\x7f' )  KEY="backspace" ;;
             $'\t' )          KEY="tab" ;;
-            [[:alnum:]] )    KEY=$key ;;
+            [qQ] )           KEY="quit" ;;
         esac
 
     fi
 
     # Catch all following inputs (e.g. if the button is held down)
     while IFS= read -rsn1 -t 0.001 _; do :; done
-
-}
-
-prog_control () {
-
-    case "$KEY" in
-        "enter" )     (( PREV=STEP )); (( STEP++ )) ;;
-        "backspace" ) (( STEP=PREV )) ;;
-        [hH] )        (( PREV=STEP )); (( STEP=0 )) ;;
-        [qQ] )        quit ;;
-    esac
 
 }
