@@ -2,12 +2,15 @@
 
 source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
+source "$SCRIPT_DIR/utils/ctrl.sh"
 
 print_help () {
 
     print_actions
 
     print_title "WELCOME TO FILECOMP"
+
+    clear_content
 
     local help=(
         "FileComp recursively compares two directories for unique files using their hash values."
@@ -26,7 +29,6 @@ print_help () {
 
     for i in "${!help[@]}"; do printf "%s%s\n" "$PRFX" "${help[i]}"; done
 
-
-    clear_content
+    await_next
 
 }

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-read_key () {
+source "$SCRIPT_DIR/utils/ui.sh"
+
+read_input () {
 
     local key rest seq
 
@@ -18,12 +20,13 @@ read_key () {
 
         # Parse special keys
         case "$key" in
-            $'\e[A' ) KEY="up" ;;
-            $'\e[B' ) KEY="down" ;;
-            $'\e[C' ) KEY="right" ;;
-            $'\e[D' ) KEY="left" ;;
-            $'\e[5' ) KEY="prev" ;;
-            $'\e[6' ) KEY="next" ;;
+            $'\e[A' ) echo "up" ;;
+            $'\e[B' ) echo "down" ;;
+            $'\e[C' ) echo "right" ;;
+            $'\e[D' ) echo "left" ;;
+            $'\e[5' ) echo "prev" ;;
+            $'\e[6' ) echo "next" ;;
+            * )       echo 0
         esac
 
     else
@@ -31,15 +34,33 @@ read_key () {
         # Handle regular keys
         # Convert control keys to readable names
         case "$key" in
-            $' ' )           KEY="space" ;;
-            $'\n'|$'\r'|"" ) KEY="enter" ;;
-            $'\t' )          KEY="tab" ;;
-            [qQ] )           KEY="quit" ;;
+            [qQ] )           echo "quit" ;;
+            $' ' )           echo "space" ;;
+            $'\n'|$'\r'|"" ) echo "enter" ;;
+            $'\t' )          echo "tab" ;;
+            * )              echo 0
         esac
 
     fi
 
     # Catch all following inputs (e.g. if the button is held down)
     while IFS= read -rsn1 -t 0.001 _; do :; done
+
+}
+
+quit () {
+    reset_env
+}
+
+await_next () {
+
+    while true; do
+
+        case "$( read_input )" in
+            "enter" ) break ;;
+            "quit" ) quit ;;
+        esac
+
+    done
 
 }

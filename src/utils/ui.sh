@@ -33,10 +33,6 @@ reset_env () {
 
 }
 
-quit () {
-    reset_env
-}
-
 jump_content () {
     tput cup $START 0
 }
