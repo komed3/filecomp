@@ -72,7 +72,6 @@ print_help () {
             "tab" ) tab=$(( ( $tab + 1 ) % $max )) ;;
             "enter" ) break ;;
             "quit" )  quit ;;
-
         esac
 
     done
