@@ -2,7 +2,9 @@
 
 source "$SCRIPT_DIR/utils/ui.sh"
 
-read_input () {
+KEY=""
+
+read_key () {
 
     local key rest seq
 
@@ -20,13 +22,13 @@ read_input () {
 
         # Parse special keys
         case "$key" in
-            $'\e[A' ) echo "up" ;;
-            $'\e[B' ) echo "down" ;;
-            $'\e[C' ) echo "right" ;;
-            $'\e[D' ) echo "left" ;;
-            $'\e[5' ) echo "prev" ;;
-            $'\e[6' ) echo "next" ;;
-            * )       echo 0
+            $'\e[A' ) KEY="up" ;;
+            $'\e[B' ) KEY="down" ;;
+            $'\e[C' ) KEY="right" ;;
+            $'\e[D' ) KEY="left" ;;
+            $'\e[5' ) KEY="prev" ;;
+            $'\e[6' ) KEY="next" ;;
+            * )       KEY=0
         esac
 
     else
@@ -34,11 +36,11 @@ read_input () {
         # Handle regular keys
         # Convert control keys to readable names
         case "$key" in
-            [qQ] )           echo "quit" ;;
-            $' ' )           echo "space" ;;
-            $'\n'|$'\r'|"" ) echo "enter" ;;
-            $'\t' )          echo "tab" ;;
-            * )              echo 0
+            [qQ] )           KEY="quit" ;;
+            $' ' )           KEY="space" ;;
+            $'\n'|$'\r'|"" ) KEY="enter" ;;
+            $'\t' )          KEY="tab" ;;
+            * )              KEY=0
         esac
 
     fi
@@ -56,7 +58,9 @@ await_next () {
 
     while true; do
 
-        case "$( read_input )" in
+        read_key
+
+        case "$KEY" in
             "enter" ) break ;;
             "quit" ) quit ;;
         esac
