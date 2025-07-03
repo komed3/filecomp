@@ -76,6 +76,11 @@ print_footer () {
 
 }
 
+print_title () {
+    set_line 2
+    printf "%s%s%s\n" "$SLINE" "$1" "$RLINE"
+}
+
 print_actions () {
 
     local actions=( "$@" "[ENTER] Proceed" "[H]elp" "[Q]uit" )

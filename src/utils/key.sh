@@ -18,13 +18,12 @@ read_key () {
 
         # Parse special keys
         case "$key" in
-            $'\e[A' ) echo "arrow_up" ;;
-            $'\e[B' ) echo "arrow_down" ;;
-            $'\e[C' ) echo "arrow_right" ;;
-            $'\e[D' ) echo "arrow_left" ;;
-            $'\e[5' ) echo "page_up" ;;
-            $'\e[6' ) echo "page_down" ;;
-            * )       echo 0 ;;
+            $'\e[A' ) KEY="arrow_up" ;;
+            $'\e[B' ) KEY="arrow_down" ;;
+            $'\e[C' ) KEY="arrow_right" ;;
+            $'\e[D' ) KEY="arrow_left" ;;
+            $'\e[5' ) KEY="page_up" ;;
+            $'\e[6' ) KEY="page_down" ;;
         esac
 
     else
@@ -32,12 +31,11 @@ read_key () {
         # Handle regular keys
         # Convert control keys to readable names
         case "$key" in
-            $' ' )           echo "space" ;;
-            $'\n'|$'\r'|"" ) echo "enter" ;;
-            $'\b'|$'\x7f' )  echo "backspace" ;;
-            $'\t' )          echo "tab" ;;
-            [[:alnum:]] )    echo $key ;;
-            * )              echo 0 ;;
+            $' ' )           KEY="space" ;;
+            $'\n'|$'\r'|"" ) KEY="enter" ;;
+            $'\b'|$'\x7f' )  KEY="backspace" ;;
+            $'\t' )          KEY="tab" ;;
+            [[:alnum:]] )    KEY=$key ;;
         esac
 
     fi

@@ -23,3 +23,8 @@ export BG_BLUE="$( tput setab 4 )"
 export BG_MAGENTA="$( tput setab 5 )"
 export BG_CYAN="$( tput setab 6 )"
 export BG_WHITE="$( tput setab 7 )"
+
+# Styles
+export SLINE="$( tput smul )"
+export RLINE="$( tput rmul )"
+export BOLD="$( tput bold )"
