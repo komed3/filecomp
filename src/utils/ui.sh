@@ -68,7 +68,7 @@ print_footer () {
     local left=$(( $COLS - ${#credits} ))
 
     set_line $(( $ROWS - 1 )) 0
-    printf "%s%*s%s%s" "${REVID}" "$left" "" "$credits" "$RESET"
+    printf "%s%*s%s%s" "$REVID" "$left" "" "$credits" "$RESET"
 
 }
 
@@ -86,4 +86,5 @@ print_actions () {
     for action in "${actions[@]}"; do
         printf "%s %s %s  " "$REVID" "$action" "$RESET"
     done
+
 }

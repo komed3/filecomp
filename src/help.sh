@@ -6,7 +6,7 @@ source "$SCRIPT_DIR/utils/ctrl.sh"
 
 print_help () {
 
-    print_actions
+    print_actions "TAB::Help"
 
     print_title "WELCOME TO FILECOMP"
 
@@ -29,6 +29,6 @@ print_help () {
 
     for i in "${!help[@]}"; do printf "%s%s\n" "$PRFX" "${help[i]}"; done
 
-    await_next
+    await_to_proceed
 
 }

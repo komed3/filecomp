@@ -54,7 +54,7 @@ quit () {
     reset_env
 }
 
-await_next () {
+await_to_proceed () {
 
     while true; do
 
