@@ -62,7 +62,7 @@ await_to_proceed () {
 
         case "$KEY" in
             "enter" ) break ;;
-            "quit" ) quit ;;
+            "quit" )  quit ;;
         esac
 
     done
