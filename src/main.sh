@@ -19,7 +19,7 @@ main () {
     while true; do
 
         case $STEP in
-            "0" ) help ;;
+            0 ) help ;;
         esac
 
         read_key
