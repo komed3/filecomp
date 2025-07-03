@@ -79,12 +79,11 @@ print_title () {
 
 print_actions () {
 
-    local actions=( "$@" "[ENTER] Proceed" "[H] Help" "[Q] Quit" )
+    local actions=( "$@" "ENTER::Proceed" "Q::Quit" )
 
     set_line $(( $ROWS - 3 ))
 
     for action in "${actions[@]}"; do
-        printf "%s%s%s  " "$REVID" "$action" "$RESET"
+        printf "%s %s %s  " "$REVID" "$action" "$RESET"
     done
-
 }
