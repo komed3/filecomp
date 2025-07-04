@@ -5,6 +5,7 @@ source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
 source "$SCRIPT_DIR/utils/ctrl.sh"
 
+# Default state to select first option
 SELECT_NULL=( 1 )
 
 select_menu () {
@@ -40,24 +41,32 @@ select_menu () {
     # Show options list and proceed user inputs
     while true; do
 
-        # Jump to content
-        jump_content
+        # Render only if the pointer has changed
+        if (( pointer != prev )); then
 
-        # List all options
-        for i in "${!opts_ref[@]}"; do
+            # Jump to content
+            jump_content
 
-            hl=""; mark=" "
+            # List all options
+            for i in "${!opts_ref[@]}"; do
 
-            # Highlight current line
-            if (( i == pointer )); then hl="$REVID"; fi
+                hl=""; mark=" "
 
-            # Mark "x" on selected option
-            if (( selected[$i] == 1 )); then mark="x"; fi
+                # Highlight current line
+                if (( i == pointer )); then hl="$REVID"; fi
 
-            # Print the line
-            printf "%s%s[%s] %s%s\n" "$PRFX" "$hl" "$mark" "${opts_ref[$i]}" "$RESET"
+                # Mark "x" on selected option
+                if (( selected[$i] == 1 )); then mark="x"; fi
 
-        done
+                # Print the line
+                printf "%s%s[%s] %s%s\n" "$PRFX" "$hl" "$mark" "${opts_ref[$i]}" "$RESET"
+
+            done
+
+        fi
+
+        # Set previous pointer to current
+        prev=$pointer
 
         # Read key input
         read_key
@@ -66,10 +75,10 @@ select_menu () {
         case "$KEY" in
 
             # Navigate upwards
-            "arrow_up" ) (( pointer = ( pointer - 1 + count ) % count )) ;;
+            "up" ) (( pointer = ( pointer - 1 + count ) % count )) ;;
 
             # Navigate down
-            "arrow_down" ) (( pointer = ( pointer + 1 ) % count )) ;;
+            "down" ) (( pointer = ( pointer + 1 ) % count )) ;;
 
             # Toggle selection
             "space" )
