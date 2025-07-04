@@ -63,7 +63,7 @@ print_help () {
                 ) ;;
 
                 # Functions
-                2 ) IFS=", "; help=(
+                2 ) help=(
                     "Users are guided safely through the individual steps, no text input is necessary."
                     ""
                     "${BOLD}Navigation:${RESET}"
@@ -76,7 +76,7 @@ print_help () {
                     ""
                     "${BOLD}Hash Algorithm:${RESET}"
                     "FileComp works with various hash algorithms that are installed on your machine."
-                    "Choose between: ${AVAILABLE_HASHES[*]}"
+                    "Choose between: ${BOLD}${CYAN}${AVAILABLE_HASHES[*]}${RESET}"
                     ""
                     "${BOLD}Output Mode:${RESET}"
                     "By default, the list of unique files will be recorded within a log."
