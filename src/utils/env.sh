@@ -11,13 +11,14 @@ check_available_hashes () {
         [SHA1]="sha1sum"
         [SHA256]="sha256sum"
         [SHA512]="sha512sum"
-        [MD5]="md5sum"
         [B2]="b2sum"
+        [MD5]="md5sum"
     )
 
     AVAILABLE_HASHES=()
 
-    for name in "${!hash_cmds[@]}"; do
+    # Loop through the hash commands
+    for name in SHA1 SHA256 SHA512 B2 MD5; do
         if command -v "${hash_cmds[$name]}" >/dev/null 2>&1; then
             AVAILABLE_HASHES+=( "$name" )
         fi
