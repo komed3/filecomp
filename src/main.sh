@@ -9,6 +9,7 @@ source "$SCRIPT_DIR/utils/ui.sh"
 
 # Load program parts
 source "$SCRIPT_DIR/help.sh"
+source "$SCRIPT_DIR/config.sh"
 
 # Main container function
 # This function orchestrates the execution of the script
@@ -26,6 +27,9 @@ main () {
 
     # Print the help screen
     print_help
+
+    # Start the preparation for file comparison
+    config_loop
 
     # Reset the environment to quit safely
     reset_env
