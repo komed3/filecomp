@@ -23,31 +23,84 @@ select_menu () {
 
     # Define some variables to contol inputs
     local count=${#opts_ref[@]}         # Number of options
-    local pointer=0                     # Current cursor position
+    local pointer=0 prev=-1             # Current / prev. cursor position
 
     # Set initial states (default 0)
     for (( i=0; i < count; i++ )); do
-        selected[i]=${init_ref[$i]:-0}
+        selected[$i]=${init_ref[$i]:-0}
     done
 
+    # Print actions
+    print_actions "UP/DN::Navigate" "SPACE::Select"
+
+    # Clear the content
     clear_content
 
-    # List all options
-    for i in "${!opts_ref[@]}"; do
+    # The main loop
+    # Show options list and proceed user inputs
+    while true; do
 
-        hl=""; mark=" "
+        # Jump to content
+        jump_content
 
-        # Highlight current line
-        if (( i == pointer )); then hl="$REVID"; fi
+        # List all options
+        for i in "${!opts_ref[@]}"; do
 
-        # Mark "x" on selected option
-        if (( selected[$i] == 1 )); then mark="x"; fi
+            hl=""; mark=" "
 
-        # Print the line
-        printf "%s%s[%s] %s%s\n" "$PRFX" "$hl" "$mark" "${opts_ref[$i]}" "$RESET"
+            # Highlight current line
+            if (( i == pointer )); then hl="$REVID"; fi
+
+            # Mark "x" on selected option
+            if (( selected[$i] == 1 )); then mark="x"; fi
+
+            # Print the line
+            printf "%s%s[%s] %s%s\n" "$PRFX" "$hl" "$mark" "${opts_ref[$i]}" "$RESET"
+
+        done
+
+        # Read key input
+        read_key
+
+        # Check for commands
+        case "$KEY" in
+
+            # Navigate upwards
+            "arrow_up" ) (( pointer = ( pointer - 1 + count ) % count )) ;;
+
+            # Navigate down
+            "arrow_down" ) (( pointer = ( pointer + 1 ) % count )) ;;
+
+            # Toggle selection
+            "space" )
+                if (( multi_flag == 0 )); then
+                    # Radio: deselect all, then activate the current one
+                    for (( j=0; j < count; j++ )); do selected[$j]=0; done
+                    selected[$pointer]=1
+                else
+                    # Checkbox: only deselect if allowed
+                    if (( selected[$pointer] == 1 )); then
+                        (( allow_none == 1 )) && selected[$pointer]=0
+                    else
+                        selected[$pointer]=1
+                    fi
+                fi ;;
+
+            # Enter: only continue if selection is valid
+            # If input is required, beep on empty
+            "enter" )
+                if (( require_one == 1 )); then
+                    local any=0
+                    for v in "${selected[@]}"; do (( v == 1 )) && any=1; done
+                    (( any == 1 )) || { tput bel; continue; }
+                fi
+                break ;;
+
+            # Quit the program
+            [qQ] ) quit ;;
+
+        esac
 
     done
-
-    await_to_proceed
 
 }

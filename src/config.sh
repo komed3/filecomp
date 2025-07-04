@@ -15,9 +15,6 @@ DB_DELETE=0
 
 set_hash_algo () {
 
-    # Print actions
-    print_actions "UP/DN::Navigate" "SPACE::Select"
-
     # Print the title
     print_title "SELECT HASH ALGORITHM"
 
