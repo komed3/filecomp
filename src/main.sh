@@ -10,6 +10,7 @@ source "$SCRIPT_DIR/help.sh"
 main () {
 
     check_available_hashes
+
     setup_env
 
     print_header
