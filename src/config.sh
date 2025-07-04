@@ -13,6 +13,9 @@ HASH_ALGO=0
 OUTP_OPT=0
 DB_DELETE=0
 
+OUTP_OPTS=( "Write files to log" "Copy files to new directory" "Both options" )
+DB_DELETE_OPTS=( "Keep it" "Delete it" )
+
 # Set the alorithm for hashing
 set_hash_algo () {
 
@@ -28,20 +31,30 @@ set_hash_algo () {
 }
 
 # Set the option for dealing with unique files
-# Default: write to log
-set_output () {
-
-    outp_opts=( "Write files to log" "Copy files to new directory" "Both options" )
-    outp_init=( 1 0 0 )
+set_output_option () {
 
     # Print the title
     print_title "SELECT OUTPUT OPTION FOR UNIQUE FILES"
 
-    # Menu to select algorithm from available hashes
-    select_menu 0 1 0 outp_opts outp_init
+    # Menu to select output option
+    select_menu 0 1 0 OUTP_OPTS
 
     # Save the selected output options
     OUTP_OPT=${result[0]}
+
+}
+
+# Decide whether to keep or delete the database
+keep_or_delete_db () {
+
+    # Print the title
+    print_title "HOW TO PROCEED WITH HASH DATABASE"
+
+    # Menu to decide about the database
+    select_menu 0 1 0 DB_DELETE_OPTS
+
+    # Save the decision
+    DB_DELETE=${result[0]}
 
 }
 
@@ -54,7 +67,10 @@ config_loop () {
     # Step 1: Set hash algorithm
     set_hash_algo
 
-    # Step 2: select output option
-    set_output
+    # Step 2: Select output option
+    set_output_option
+
+    # Step 3: Keep or delete database
+    keep_or_delete_db
 
 }
