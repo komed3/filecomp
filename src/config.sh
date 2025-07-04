@@ -1,8 +1,10 @@
 #!/bin/bash
 
-source "$SCRIPT_DIR/utils/ctrl.sh"
+# Load utility scripts
 source "$SCRIPT_DIR/utils/ui.sh"
+source "$SCRIPT_DIR/utils/select.sh"
 
+# Config variables
 BASE_DIR=""
 COMP_DIR=""
 COPY_DIR=""
@@ -14,12 +16,13 @@ DB_DELETE=0
 set_hash_algo () {
 
     # Print actions
-    print_actions "UP/DN::Navigate"
+    print_actions "UP/DN::Navigate" "SPACE::Select"
 
     # Print the title
     print_title "SELECT HASH ALGORITHM"
 
-    await_to_proceed
+    # Menu to select from available hashes
+    select_menu 0 1 0 AVAILABLE_HASHES
 
 }
 

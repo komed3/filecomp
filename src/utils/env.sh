@@ -17,7 +17,7 @@ check_available_hashes () {
 
     AVAILABLE_HASHES=()
 
-    for name in "${!hash_cmds[@]}"; do
+    for $name in "${!hash_cmds[@]}"; do
         if command -v "${hash_cmds[$name]}" >/dev/null 2>&1; then
             AVAILABLE_HASHES+=( "$name" )
         fi
