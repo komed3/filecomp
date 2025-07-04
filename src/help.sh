@@ -21,6 +21,7 @@ print_help () {
                 # Overview / Intro
                 0 ) help=(
                     "FileComp recursively compares two directories for unique files using their hash values."
+                    "To accomplish this, the program runs through a series of steps."
                     ""
                     "${BOLD}Steps:${RESET}"
                     "1) Select base directory."
@@ -36,24 +37,44 @@ print_help () {
 
                 # Functions
                 1 ) help=(
-                    "${BOLD}Functions:${RESET}"
+                    "FileComp operates carefully with your files and will neither change nor move them."
                     ""
-                    "${BOLD}Directories:${RESET} Choose source and target directories for comparison."
-                    "${BOLD}Hashing:${RESET} Calculates hashes for all files to detect unique files."
-                    "${BOLD}Logging:${RESET} Outputs a log of unique files."
-                    "${BOLD}Copying:${RESET} Optionally copies unique files to a chosen directory."
-                    "${BOLD}Database:${RESET} Build a hash database for comparison."
+                    "${BOLD}Hashing:${RESET}"
+                    "It calculates hashes for files to detect unique ones, rather than looking for names."
+                    "Therefore you can choose from different hashing algorithms (e.g. SHA1, MD5, B2)."
+                    ""
+                    "${BOLD}Comparison:${RESET}"
+                    "Choose source and target directories for comparison through arrow key navigation."
+                    "Files from target will be compared with those from base and treated as unique."
+                    ""
+                    "${BOLD}Database:${RESET}"
+                    "The program will create a database of file hashes to speed up the process."
+                    "This database will remain in your working directory unless you delete it."
+                    ""
+                    "${BOLD}Copying:${RESET}"
+                    "Beside of logging unique files, FileComp can copies them to a chosen directory."
+                    "The original files are kept safe."
                 ) ;;
 
                 # Functions
-                2 ) help=(
-                    "${BOLD}Settings:${RESET}"
+                2 ) IFS=", "; help=(
+                    "Users are guided safely through the individual steps, no text input is necessary."
                     ""
-                    "${BOLD}Hash Algorithm:${RESET} Choose between SHA1, SHA256, MD5 and B2SUM"
-                    "${BOLD}Output Mode:${RESET} Write to log, copy files, or both options."
-                    "${BOLD}Copy Directory:${RESET} Set a folder for unique files."
-                    "${BOLD}Database Handling:${RESET} Decide to keep or delete hash DB after run."
-                    "${BOLD}Navigation:${RESET} Simple navigation using arrow keys."
+                    "${BOLD}Navigation:${RESET}"
+                    "The controls work intuitively and do not require any direct text input."
+                    "Available commands are listed below, at the bottom of the screen."
+                    ""
+                    "${BOLD}Select Directories:${RESET}"
+                    "Directories are selected using lists that can be navigated through the arrow keys."
+                    "The program can search the entire tree, starting from the home folder."
+                    ""
+                    "${BOLD}Hash Algorithm:${RESET}"
+                    "FileComp works with various hash algorithms that are installed on your machine."
+                    "Choose between: ${AVAILABLE_HASHES[*]}"
+                    ""
+                    "${BOLD}Output Mode:${RESET}"
+                    "By default, the list of unique files will be recorded within a log."
+                    "The second method is to copy the files to a new folder."
                 ) ;;
 
             esac
