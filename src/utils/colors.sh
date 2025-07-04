@@ -1,30 +1,30 @@
 #!/bin/bash
 
 # General commands
-export RESET="$( tput sgr0 )"
-export REVID="$( tput rev )"
+RESET="$( tput sgr0 )"
+REVID="$( tput rev )"
 
 # Foreground colors
-export BLACK="$( tput setaf 0 )"
-export RED="$( tput setaf 1 )"
-export GREEN="$( tput setaf 2 )"
-export YELLOW="$( tput setaf 3 )"
-export BLUE="$( tput setaf 4 )"
-export MAGENTA="$( tput setaf 5 )"
-export CYAN="$( tput setaf 6 )"
-export WHITE="$( tput setaf 7 )"
+BLACK="$( tput setaf 0 )"
+RED="$( tput setaf 1 )"
+GREEN="$( tput setaf 2 )"
+YELLOW="$( tput setaf 3 )"
+BLUE="$( tput setaf 4 )"
+MAGENTA="$( tput setaf 5 )"
+CYAN="$( tput setaf 6 )"
+WHITE="$( tput setaf 7 )"
 
 # Background colors
-export BG_BLACK="$( tput setab 0 )"
-export BG_RED="$( tput setab 1 )"
-export BG_GREEN="$( tput setab 2 )"
-export BG_YELLOW="$( tput setab 3 )"
-export BG_BLUE="$( tput setab 4 )"
-export BG_MAGENTA="$( tput setab 5 )"
-export BG_CYAN="$( tput setab 6 )"
-export BG_WHITE="$( tput setab 7 )"
+BG_BLACK="$( tput setab 0 )"
+BG_RED="$( tput setab 1 )"
+BG_GREEN="$( tput setab 2 )"
+BG_YELLOW="$( tput setab 3 )"
+BG_BLUE="$( tput setab 4 )"
+BG_MAGENTA="$( tput setab 5 )"
+BG_CYAN="$( tput setab 6 )"
+BG_WHITE="$( tput setab 7 )"
 
 # Styles
-export SLINE="$( tput smul )"
-export RLINE="$( tput rmul )"
-export BOLD="$( tput bold )"
+SLINE="$( tput smul )"
+RLINE="$( tput rmul )"
+BOLD="$( tput bold )"
