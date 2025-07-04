@@ -1,19 +1,25 @@
 #!/bin/bash
 
+# Load utility scripts
 source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
 source "$SCRIPT_DIR/utils/ctrl.sh"
 
+# Help screen for FileComp
 print_help () {
 
     local tab=0 prev=-1 max=3 help=()
 
+    # Print actions
     print_actions "TAB::Help"
 
+    # Print the title
     print_title "WELCOME TO FILECOMP"
 
+    # Main loop
     while true; do
 
+        # Render only if the tab has changed
         if (( prev != tab )); then
 
             case $tab in
@@ -79,16 +85,21 @@ print_help () {
 
             esac
 
+            # Clear the screen
             clear_content
 
+            # Print the help content line by line
             for i in "${!help[@]}"; do printf "%s%s\n" "$PRFX" "${help[$i]}"; done
 
+            # Set previous tab to current
             prev=$tab
 
         fi
 
+        # Read key input
         read_key
 
+        # Check for commands
         case "$KEY" in
             "tab" ) tab=$(( ( $tab + 1 ) % $max )) ;;
             "enter" ) break ;;

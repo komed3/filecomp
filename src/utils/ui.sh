@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# Load utility scripts
 source "$SCRIPT_DIR/utils/colors.sh"
 
+# Terminal dimensions
 export COLS=$( tput cols )
 export ROWS=$( tput lines )
 
@@ -13,6 +15,7 @@ export START=4
 export END=$(( $ROWS - 6 ))
 export HEIGHT=$(( $ROWS - 10 ))
 
+# Setup environment and trap exit signals to quit safely
 setup_env () {
 
     ENV_STTY=$( stty -g )
@@ -24,6 +27,7 @@ setup_env () {
 
 }
 
+# Reset environment and restore terminal settings
 reset_env () {
 
     stty "$ENV_STTY"
@@ -33,23 +37,28 @@ reset_env () {
 
 }
 
+# Jump to the content area
 jump_content () {
     tput cup $START 0
 }
 
+# Set the cursor to a specific line and column, clearing the line
 set_line () {
     tput cup $1 ${2:-$LGAP}; tput el
 }
 
+# Clear the content area and reset the cursor position
 clear_content () {
     for (( i=START; i < END; i++ )); do set_line $i; done
     jump_content
 }
 
+# Print a character multiple times
 repeat_char () {
     for (( i=0; i < $2; i++ )); do printf "%s" "$1"; done
 }
 
+# Print the program header
 print_header () {
 
     local left=$(( ( $COLS - 10 ) / 2 ))
@@ -62,6 +71,7 @@ print_header () {
 
 }
 
+# Print the program footer with credits
 print_footer () {
 
     local credits="(c) 2025 [MIT] Paul Köhler (komed3) — FILECOME v0.1.0"
@@ -72,11 +82,14 @@ print_footer () {
 
 }
 
+# Print the (current step) title
 print_title () {
     set_line 2
     printf "%s%s%s\n" "$SLINE" "$1" "$RLINE"
 }
 
+# Print the actions at the bottom of the screen
+# The actions are passed as arguments, with "ENTER" and "Q" always included
 print_actions () {
 
     local actions=( "$@" "ENTER::Proceed" "Q::Quit" )

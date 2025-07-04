@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# Environment variables
 AVAILABLE_HASHES=()
 
+# Check available hash commands and populate AVAILABLE_HASHES
 check_available_hashes () {
 
     # Map: Algorithm → Command

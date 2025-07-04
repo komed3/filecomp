@@ -1,9 +1,15 @@
 #!/bin/bash
 
+# Load utility scripts
 source "$SCRIPT_DIR/utils/ui.sh"
 
+# Global variable to store the key pressed
 KEY=""
 
+# Function to read a key from the terminal
+# This function captures single key presses, including escape sequences for special keys.
+# It sets the global variable KEY to a readable name for the key pressed.
+# If no of the specified keys are pressed, KEY will be set to 0.
 read_key () {
 
     local key rest seq
@@ -50,10 +56,12 @@ read_key () {
 
 }
 
+# Reset the environment and exit the script
 quit () {
     reset_env
 }
 
+# Wait for the user to press enter to proceed or quit the script
 await_to_proceed () {
 
     while true; do
