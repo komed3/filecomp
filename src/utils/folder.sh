@@ -14,7 +14,7 @@ PG_MAX=$(( $ROWS - 12 ))
 select_folder () {
 
     # Set up folder selection
-    local current_path="$1"
+    local current_path="$1" last=""
     local entries
 
     local page=0 prev_page=-1
@@ -34,7 +34,10 @@ select_folder () {
         jump_content
 
         # Read contents of the folder (directories only, with access check)
-        mapfile -t entries < <( find "$current_path" -mindepth 1 -maxdepth 1 -type d -readable -exec test -x {} \; -print | sort )
+        if [[ "$current_path" != "$last" ]]; then
+            mapfile -t entries < <( find "$current_path" -mindepth 1 -maxdepth 1 -type d -readable -exec test -x {} \; -print | sort )
+            last=$current_path
+        fi
 
         local total=${#entries[@]}
         local pages=$(( ( $total + $PG_MAX - 1 ) / $PG_MAX ))
@@ -50,12 +53,12 @@ select_folder () {
 
         # Print the current path with page info
         set_line $PATH_LINE
-        printf "Path: %s%s%s   page %d of %d" \
+        printf "Path: %s%s%s   %s[%d/%d]%s" \
             "$YELLOW" "$current_path" "$RESET" \
-            "$(( $page + 1 ))" "$pages"
+            "$REVID" "$(( $page + 1 ))" "$pages" "$RESET"
 
         # If no entries found
-        if (( $total == 0 )); then
+        if (( total == 0 )); then
 
             set_line $PG_START
             printf "%s(No accessible subdirectories)%s" "$RED" "$RESET"
