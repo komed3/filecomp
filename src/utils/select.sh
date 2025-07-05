@@ -110,7 +110,7 @@ select_menu () {
                 break ;;
 
             # Quit the program
-            [qQ] ) quit ;;
+            "quit" ) quit ;;
 
         esac
 
