@@ -3,6 +3,7 @@
 # Load utility scripts
 source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
+source "$SCRIPT_DIR/utils/spinner.sh"
 source "$SCRIPT_DIR/utils/ctrl.sh"
 
 # Set display range
@@ -11,10 +12,16 @@ PG_START=6
 PG_END=$END
 PG_MAX=$(( $ROWS - 12 ))
 
+# Clear the content area
 clear_page () {
     for (( i=0; i < PG_MAX; i++ )); do set_line $(( $PG_START + $i )); done
 }
 
+# Function to print a folder select menu
+# Arguments:
+#   $1 - Current path to start from
+# Returns:
+#   result - The selected folder path
 select_folder () {
 
     # Set up folder selection
@@ -43,33 +50,14 @@ select_folder () {
             # Clear page
             clear_page
 
-            # Show message while awaiting data
-            # Start spinner in background after 0.25s delay
-            (
-
-                sleep 0.25
-
-                if ! kill -0 "$$" 2>/dev/null; then exit; fi
-
-                set_line $PATH_LINE
-                printf "Path: %s%s%s" "$BOLD$CYAN" "$current_path" "$RESET"
-
-                set_line $PG_START
-
-                local spin='-\|/' i=0
-
-                while :; do
-                    printf "%s%s  %s%s" "$YELLOW" "Scanning directory …" "${spin:i++%4:1}" "$RESET"
-                    sleep 0.1; set_line $PG_START
-                done
-
-            ) & local spi=$!
+            # Show message while awaiting data after 0.25s delay
+            start_spinner $PG_START "Scanning directory"
 
             # Read contents of the folder (directories only, with access check)
             mapfile -t entries < <( find "$current_path" -mindepth 1 -maxdepth 1 -type d -readable -exec test -x {} \; -print | sort )
 
-            # Kill spinner if running
-            kill "$spi" 2>/dev/null; wait "$spi" 2>/dev/null
+            # Stop spinner if running
+            stop_spinner $SPID
 
             # Set last path to current
             last=$current_path
