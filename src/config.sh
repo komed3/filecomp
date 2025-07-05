@@ -45,6 +45,24 @@ select_comp_dir () {
 
 }
 
+# Set the directory for copying unique files to
+select_copy_dir () {
+
+    if (( OUTP_OPT != 0 )) then
+
+        # Print the title
+        print_title "SELECT DIRECTORY TO COPY UNIQUE FILES TO"
+
+        # Menu to select directory
+        select_folder $HOME
+
+        # Save the selected directory
+        COPY_DIR=$result
+
+    fi
+
+}
+
 # Set the alorithm for hashing
 set_hash_algo () {
 
@@ -106,7 +124,7 @@ config_loop () {
     set_output_option
 
     # Step 4a: If needed, select copy directory
-    #...
+    select_copy_dir
 
     # Step 5: Keep or delete database
     keep_or_delete_db
