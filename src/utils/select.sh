@@ -59,7 +59,7 @@ select_menu () {
         # List all options
         for i in "${!opts_ref[@]}"; do
 
-            hl=""; mark=" "
+            local hl="" mark=" "
 
             # Highlight current line
             if (( i == pointer )); then hl="$REVID"; fi
