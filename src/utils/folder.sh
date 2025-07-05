@@ -108,6 +108,57 @@ select_folder () {
         prev=$pointer
         prev_page=$page
 
+        # Read key input
+        read_key
+
+        # Check for commands
+        case "$KEY" in
+
+            # Navigate upwards
+            "up" )
+                if (( pointer > 0 )); then (( pointer-- ));
+                else tput bel; fi ;;
+
+            # Navigate down
+            "down" )
+                if (( pointer < total - 1 )); then (( pointer++ ));
+                else tput bel; fi ;;
+
+            # Go to prev page
+            "prev" )
+                if (( page > 0 )); then pointer=$(( ( $page - 1 ) * $PG_MAX ));
+                else tput bel; fi ;;
+
+            # Go to next page
+            "next" )
+                if (( page + 1 < pages )); then pointer=$(( ( $page + 1 ) * $PG_MAX ))
+                else pointer=$(( $total - 1 )); tput bel; fi ;;
+
+            # Go deeper
+            "right" )
+                if (( total > 0 )); then
+                    current_path="${entries[$pointer]}"
+                    pointer=0; prev_page=-1; prev=-1
+                else tput bel; fi ;;
+
+            # Come back a level
+            "left" )
+                if [[ "$current_path" != "/" ]]; then
+                    current_path="$( dirname "$current_path" )"
+                    pointer=0; prev_page=-1; prev=-1
+                else tput bel; fi ;;
+
+            # Enter: get back the current (selected) directory
+            # If within deepest directory, return current one
+            "enter" )
+                result="${entries[$pointer]:-$current_path}"
+                break ;;
+
+            # Quit the program
+            "quit" ) quit ;;
+
+        esac
+
     done
 
 }
