@@ -17,7 +17,7 @@ DB_DELETE=0
 OUTP_OPTS=( "Write files to log" "Copy files to new directory" "Both options" )
 DB_DELETE_OPTS=( "Keep it" "Delete it" )
 
-# Set the alorithm for hashing
+# Set the base directory
 select_base_dir () {
 
     # Print the title
@@ -28,6 +28,20 @@ select_base_dir () {
 
     # Save the selected directory
     BASE_DIR=$result
+
+}
+
+# Set the directory for comparison
+select_comp_dir () {
+
+    # Print the title
+    print_title "SELECT DIRECTORY TO COMPARE"
+
+    # Menu to select directory
+    select_folder $HOME
+
+    # Save the selected directory
+    COMP_DIR=$result
 
 }
 
@@ -83,7 +97,7 @@ config_loop () {
     select_base_dir
 
     # Step 2: Select directory to compare
-    #...
+    select_comp_dir
 
     # Step 3: Set hash algorithm
     set_hash_algo
