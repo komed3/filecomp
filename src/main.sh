@@ -10,6 +10,7 @@ source "$SCRIPT_DIR/utils/ui.sh"
 # Load program parts
 source "$SCRIPT_DIR/help.sh"
 source "$SCRIPT_DIR/config.sh"
+source "$SCRIPT_DIR/hashdb.sh"
 
 # Main container function
 # This function orchestrates the execution of the script
@@ -30,6 +31,9 @@ main () {
 
     # Start the preparation for file comparison
     config_loop
+
+    # Create the hash database
+    create_hashdb
 
     # Reset the environment to quit safely
     reset_env
