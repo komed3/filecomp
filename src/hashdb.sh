@@ -1,8 +1,10 @@
 #!/bin/bash
 
+# Load utility scripts
 source "$SCRIPT_DIR/utils/colors.sh"
-source "$SCRIPT_DIR/utils/spinner.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
+source "$SCRIPT_DIR/utils/progress.sh"
+source "$SCRIPT_DIR/utils/spinner.sh"
 source "$SCRIPT_DIR/utils/ctrl.sh"
 
 create_hashdb () {
