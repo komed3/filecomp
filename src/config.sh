@@ -3,6 +3,7 @@
 # Load utility scripts
 source "$SCRIPT_DIR/utils/ui.sh"
 source "$SCRIPT_DIR/utils/select.sh"
+source "$SCRIPT_DIR/utils/folder.sh"
 
 # Config variables
 BASE_DIR=""
@@ -15,6 +16,20 @@ DB_DELETE=0
 
 OUTP_OPTS=( "Write files to log" "Copy files to new directory" "Both options" )
 DB_DELETE_OPTS=( "Keep it" "Delete it" )
+
+# Set the alorithm for hashing
+select_base_dir () {
+
+    # Print the title
+    print_title "SELECT BASE DIRECTORY"
+
+    # Menu to select directory
+    select_folder $HOME
+
+    # Save the selected directory
+    BASE_DIR=$result
+
+}
 
 # Set the alorithm for hashing
 set_hash_algo () {
@@ -64,13 +79,22 @@ config_loop () {
     # Clear previous content
     clear_content
 
-    # Step 1: Set hash algorithm
+    # Step 1: Select base directory
+    select_base_dir
+
+    # Step 2: Select directory to compare
+    #...
+
+    # Step 3: Set hash algorithm
     set_hash_algo
 
-    # Step 2: Select output option
+    # Step 4: Select output option
     set_output_option
 
-    # Step 3: Keep or delete database
+    # Step 4a: If needed, select copy directory
+    #...
+
+    # Step 5: Keep or delete database
     keep_or_delete_db
 
 }
