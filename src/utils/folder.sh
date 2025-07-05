@@ -37,26 +37,29 @@ select_folder () {
         # Jump to content
         jump_content
 
-        # If path has changed, read new directory list
+        # If path has changed, get new directory list
         if [[ "$current_path" != "$last" ]]; then
 
             # Clear page
             clear_page
 
             # Show message while awaiting data
-            # Start spinner in background after 0.5s delay
+            # Start spinner in background after 0.25s delay
             (
 
                 sleep 0.25
 
                 if ! kill -0 "$$" 2>/dev/null; then exit; fi
 
+                set_line $PATH_LINE
+                printf "Path: %s%s%s" "$BOLD$CYAN" "$current_path" "$RESET"
+
                 set_line $PG_START
 
                 local spin='-\|/' i=0
 
                 while :; do
-                    printf "%s%s  %s%s" "$YELLOW" "Reading directory …" "${spin:i++%4:1}" "$RESET"
+                    printf "%s%s  %s%s" "$YELLOW" "Scanning directory …" "${spin:i++%4:1}" "$RESET"
                     sleep 0.1; set_line $PG_START
                 done
 
