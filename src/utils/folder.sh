@@ -29,7 +29,7 @@ select_folder () {
     local pointer=0 prev=-1
 
     # Print actions
-    print_actions "UP/DN::Navigate" "LT/RT::Change directory" "PGUP/PGDN::Pages"
+    print_actions "UP/DN::Navigate" "LT/RT::Change directory" "PGUP/PGDN/TAB::Pages"
 
     # Clear the content
     clear_content
@@ -167,7 +167,7 @@ select_folder () {
                 else tput bel; fi ;;
 
             # Go to next page
-            "next" )
+            "next"|"tab" )
                 if (( page + 1 < pages )); then pointer=$(( ( $page + 1 ) * $PG_MAX ))
                 else pointer=$(( $total - 1 )); tput bel; fi ;;
 
