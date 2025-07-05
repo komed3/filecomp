@@ -4,16 +4,16 @@
 source "$SCRIPT_DIR/utils/colors.sh"
 
 # Terminal dimensions
-export COLS=$( tput cols )
-export ROWS=$( tput lines )
+COLS=$( tput cols )
+ROWS=$( tput lines )
 
-export LGAP=2
-export WIDTH=$(( $COLS - ( $LGAP * 2 ) ))
-export PRFX=$( printf '%*s' $LGAP )
+LGAP=2
+WIDTH=$(( $COLS - ( $LGAP * 2 ) ))
+PRFX=$( printf '%*s' $LGAP )
 
-export START=4
-export END=$(( $ROWS - 6 ))
-export HEIGHT=$(( $ROWS - 10 ))
+START=4
+END=$(( $ROWS - 6 ))
+HEIGHT=$(( $ROWS - 10 ))
 
 # Setup environment and trap exit signals to quit safely
 setup_env () {
