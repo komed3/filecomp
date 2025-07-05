@@ -11,6 +11,14 @@ PG_START=6
 PG_END=$END
 PG_MAX=$(( $ROWS - 12 ))
 
+clear_page () {
+
+    for (( i=1; i < PG_MAX; i++ )); do
+        set_line $(( $PG_START + $i ))
+    done
+
+}
+
 select_folder () {
 
     # Set up folder selection
@@ -33,10 +41,40 @@ select_folder () {
         # Jump to content
         jump_content
 
-        # Read contents of the folder (directories only, with access check)
+        # If path has changed, read new directory list
         if [[ "$current_path" != "$last" ]]; then
+
+            # Clear page
+            clear_page
+
+            # Show message while awaiting data
+            # Start spinner in background after 0.5s delay
+            (
+
+                sleep 0.25
+
+                if ! kill -0 "$$" 2>/dev/null; then exit; fi
+
+                set_line $PG_START
+
+                local spin='-\|/' i=0
+
+                while :; do
+                    printf "%s%s  %s%s" "$CYAN" "Reading directory …" "${spin:i++%4:1}" "$RESET"
+                    sleep 0.1; set_line $PG_START
+                done
+
+            ) & local spi=$!
+
+            # Read contents of the folder (directories only, with access check)
             mapfile -t entries < <( find "$current_path" -mindepth 1 -maxdepth 1 -type d -readable -exec test -x {} \; -print | sort )
+
+            # Kill spinner if running
+            kill "$spi" 2>/dev/null; wait "$spi" 2>/dev/null
+
+            # Set last path to current
             last=$current_path
+
         fi
 
         local total=${#entries[@]}
@@ -60,12 +98,8 @@ select_folder () {
         # If no entries found
         if (( total == 0 )); then
 
-            set_line $PG_START
+            clear_page; set_line $PG_START
             printf "%s(No accessible subdirectories)%s" "$RED" "$RESET"
-
-            for (( i=1; i < PG_MAX; i++ )); do
-                set_line $(( $PG_START + $i ))
-            done
 
         else
 
