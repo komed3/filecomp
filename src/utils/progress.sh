@@ -8,8 +8,8 @@ source "$SCRIPT_DIR/utils/ui.sh"
 BAR_DRAW_INTERVAL=50000000
 SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
 BAR_ROW=$(( $ROWS - 5 ))
-BAR_LEN=$(( $WIDTH - 22 ))
-BAR_FILLER="#"
+BAR_LEN=$(( $WIDTH - 28 ))
+BAR_FILLER="■"
 BAR_EMPTY=" "
 
 # Status vars
@@ -60,6 +60,8 @@ progress_update () {
     # Calculate the percentage and remaining time
     local pct=$(( $cur * 100 / $TOTAL_ITEMS ))
 
+    if (( pct == 100 )); then spinner="✔"; fi;
+
     if (( SPINNER_INDEX % 50 == 0 && cur > 0 )); then
         local eta=$(( $elapsed * ( $TOTAL_ITEMS - $cur ) / $cur ))
         ETA=$( date -u -d "@$eta" +%H:%M:%S )
@@ -73,11 +75,10 @@ progress_update () {
     progress_clear
 
     # Output the formatted progress bar
-    printf "%s%s%s %3d%% [%s%s] ETA %s" \
-        "$CYAN" "$spinner" "$RESET" "$pct" \
-        "$( repeat_char "$BAR_FILLER" $fill )" \
-        "$( repeat_char "$BAR_EMPTY" $empty )" \
-        "$ETA"
+    printf "%s%s%s  %3d%%  | %s%s%s%s  |  ETA %s" \
+        "$CYAN" "$spinner" "$RESET" "$pct" "$CYAN" \
+        "$( repeat_char "$BAR_FILLER" $fill )" "$RESET" \
+        "$( repeat_char "$BAR_EMPTY" $empty )" "$ETA"
 
 }
 
