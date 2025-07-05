@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Load utility scripts
+source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
+source "$SCRIPT_DIR/utils/ctrl.sh"
 source "$SCRIPT_DIR/utils/select.sh"
 source "$SCRIPT_DIR/utils/folder.sh"
 
@@ -105,28 +107,86 @@ keep_or_delete_db () {
 
 }
 
+check_options () {
+
+    # Print actions
+    print_actions "BACK::Correct"
+
+    # Print the title
+    print_title "CHECK YOUR INPUTS BEFORE PROCEED"
+
+    # Clear the content
+    clear_content
+
+    local check_label=(
+        "Base directory" "Compare with  " "Copy unique to"
+        "Hash algorithm" "Output option " "Hash database "
+    )
+
+    local check_value=(
+        "$BASE_DIR" "$COMP_DIR" "$COPY_DIR"
+        "${AVAILABLE_HASHES[$HASH_ALGO]}"
+        "${OUTP_OPTS[$OUTP_OPT]}"
+        "${DB_DELETE_OPTS[$DB_DELETE]}"
+    )
+
+    # Print list of options
+    for i in "${!check_label[@]}"; do
+
+        printf "%s%s  :  %s%s%s\n" \
+            "$PRFX" "${check_label[$i]}" \
+            "$CYAN$BOLD" "${check_value[$i]:-"N/A"}" \
+            "$RESET"
+
+    done
+
+    printf "\n%sAbort by %squitting%s the program, use %sBackspace%s to correct inputs." \
+        "$PRFX" "$BOLD" "$RESET" "$BOLD" "$RESET"
+    printf "\n%sHit %sEnter%s when ready to proceed." "$PRFX" "$BOLD" "$RESET"
+
+}
+
 # Loop to configure the script
 config_loop () {
 
-    # Clear previous content
-    clear_content
+    while true; do
 
-    # Step 1: Select base directory
-    select_base_dir
+        # Clear previous content
+        clear_content
 
-    # Step 2: Select directory to compare
-    select_comp_dir
+        # Step 1: Select base directory
+        select_base_dir
 
-    # Step 3: Set hash algorithm
-    set_hash_algo
+        # Step 2: Select directory to compare
+        select_comp_dir
 
-    # Step 4: Select output option
-    set_output_option
+        # Step 3: Set hash algorithm
+        set_hash_algo
 
-    # Step 4a: If needed, select copy directory
-    select_copy_dir
+        # Step 4: Select output option
+        set_output_option
 
-    # Step 5: Keep or delete database
-    keep_or_delete_db
+        # Step 4a: If needed, select copy directory
+        select_copy_dir
+
+        # Step 5: Keep or delete database
+        keep_or_delete_db
+
+        # Check inputs / options
+        check_options
+
+        # Read key input
+        read_key
+
+        # Check for commands
+        case "$KEY" in
+            "back" )
+                BASE_DIR=""; COMP_DIR=""; COPY_DIR=""
+                HASH_ALGO=0; OUTP_OPT=0; DB_DELETE=0 ;;
+            "enter" ) break ;;
+            "quit" )  quit ;;
+        esac
+
+    done
 
 }
