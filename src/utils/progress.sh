@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/utils/ui.sh"
 BAR_DRAW_INTERVAL=50000000
 SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
 BAR_ROW=$(( $ROWS - 5 ))
-BAR_LEN=$(( $WIDTH - 28 ))
+BAR_LEN=$(( $WIDTH - 26 ))
 BAR_FILLER="■"
 BAR_EMPTY=" "
 
@@ -75,7 +75,7 @@ progress_update () {
     progress_clear
 
     # Output the formatted progress bar
-    printf "%s%s%s  %3d%%  | %s%s%s%s  |  ETA %s" \
+    printf "%s%s%s  %3d%% | %s%s%s%s  | ETA %s" \
         "$CYAN" "$spinner" "$RESET" "$pct" "$CYAN" \
         "$( repeat_char "$BAR_FILLER" $fill )" "$RESET" \
         "$( repeat_char "$BAR_EMPTY" $empty )" "$ETA"
