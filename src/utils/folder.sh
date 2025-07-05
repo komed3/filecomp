@@ -12,11 +12,7 @@ PG_END=$END
 PG_MAX=$(( $ROWS - 12 ))
 
 clear_page () {
-
-    for (( i=1; i < PG_MAX; i++ )); do
-        set_line $(( $PG_START + $i ))
-    done
-
+    for (( i=0; i < PG_MAX; i++ )); do set_line $(( $PG_START + $i )); done
 }
 
 select_folder () {
@@ -29,7 +25,7 @@ select_folder () {
     local pointer=0 prev=-1
 
     # Print actions
-    print_actions "UP/DN::Navigate" "LT/RT::Change directory" "PGUP/PGDN/TAB::Pages"
+    print_actions "UP/DN::Navigate" "LT/RT::Change directory" "PGUP/PGDN::Pages" "TAB::Home"
 
     # Clear the content
     clear_content
@@ -60,7 +56,7 @@ select_folder () {
                 local spin='-\|/' i=0
 
                 while :; do
-                    printf "%s%s  %s%s" "$CYAN" "Reading directory …" "${spin:i++%4:1}" "$RESET"
+                    printf "%s%s  %s%s" "$YELLOW" "Reading directory …" "${spin:i++%4:1}" "$RESET"
                     sleep 0.1; set_line $PG_START
                 done
 
@@ -92,14 +88,16 @@ select_folder () {
         # Print the current path with page info
         set_line $PATH_LINE
         printf "Path: %s%s%s   %s[%d/%d]%s" \
-            "$YELLOW" "$current_path" "$RESET" \
+            "$BOLD$CYAN" "$current_path" "$RESET" \
             "$REVID" "$(( $page + 1 ))" "$pages" "$RESET"
 
         # If no entries found
         if (( total == 0 )); then
 
             clear_page; set_line $PG_START
-            printf "%s(No accessible subdirectories)%s" "$RED" "$RESET"
+            printf "%sFound no accessible subdirectories.%s" "$RED" "$RESET"
+            set_line $(( $PG_START + 1 ))
+            printf "%sThe current path will be used.%s" "$RED" "$RESET"
 
         else
 
@@ -167,7 +165,7 @@ select_folder () {
                 else tput bel; fi ;;
 
             # Go to next page
-            "next"|"tab" )
+            "next" )
                 if (( page + 1 < pages )); then pointer=$(( ( $page + 1 ) * $PG_MAX ))
                 else pointer=$(( $total - 1 )); tput bel; fi ;;
 
@@ -184,6 +182,11 @@ select_folder () {
                     current_path="$( dirname "$current_path" )"
                     pointer=0; prev_page=-1; prev=-1
                 else tput bel; fi ;;
+
+            # Go back to home directory
+            "tab" )
+                current_path="$HOME"
+                pointer=0; prev_page=-1; prev=-1 ;;
 
             # Enter: get back the current (selected) directory
             # If within deepest directory, return current one

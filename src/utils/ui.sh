@@ -44,7 +44,7 @@ jump_content () {
 
 # Set the cursor to a specific line and column, clearing the line
 set_line () {
-    tput cup $1 ${2:-$LGAP}; tput el
+    tput cup $1 0; tput el; tput cup $1 ${2:-$LGAP}
 }
 
 # Clear the content area and reset the cursor position
