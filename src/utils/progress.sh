@@ -5,8 +5,8 @@ source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
 
 # Progress bar config
-DRAW_INTERVAL_NS=50000000
-SPINNER=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
+BAR_DRAW_INTERVAL=50000000
+SPINNER_CHARS=( "⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏" )
 BAR_ROW=$(( $ROWS - 5 ))
 BAR_LEN=$(( $WIDTH - 22 ))
 BAR_FILLER="#"
@@ -38,7 +38,46 @@ progress_init () {
 # Will automatically calculate ETA, progress and bar
 progress_update () {
 
+    local ts=$( date +%s%N )
+    local delta=$(( $ts - $BAR_LAST_DRAWN ))
 
+    if (( delta < BAR_DRAW_INTERVAL )); then return; fi
+
+    BAR_LAST_DRAWN=$ts
+
+    # Calculate the current progress
+    local now=$( date +%s )
+    local elapsed=$(( $now - $BAR_START_TIME ))
+    local cur=$1
+
+    # Get the current spinner character
+    local spinner=${SPINNER_CHARS[$SPINNER_INDEX]}
+
+    # Update the spinner index
+    # Wrap around if it exceeds the length of the spinner array
+    SPINNER_INDEX=$(( ( $SPINNER_INDEX + 1 ) % ${#SPINNER_CHARS[@]} ))
+
+    # Calculate the percentage and remaining time
+    local pct=$(( $cur * 100 / $TOTAL_ITEMS ))
+
+    if (( SPINNER_INDEX % 50 == 0 && cur > 0 )); then
+        local eta=$(( $elapsed * ( $TOTAL_ITEMS - $cur ) / $cur ))
+        ETA=$( date -u -d "@$eta" +%H:%M:%S )
+    fi
+
+    # Calculate progress bar fill and empty parts
+    local fill=$(( $pct * $BAR_LEN / 100 ))
+    local empty=$(( $BAR_LEN - $fill ))
+
+    # Clear the progress bar
+    progress_clear
+
+    # Output the formatted progress bar
+    printf "%s%s%s %3d%% [%s%s] ETA %s" \
+        "$CYAN" "$spinner" "$RESET" "$pct" \
+        "$( repeat_char "$BAR_FILLER" $fill )" \
+        "$( repeat_char "$BAR_EMPTY" $empty )" \
+        "$ETA"
 
 }
 
