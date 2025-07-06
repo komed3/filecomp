@@ -175,17 +175,23 @@ config_loop () {
         # Check inputs / options
         check_options
 
-        # Read key input
-        read_key
+        # Await for user action
+        while true; do
 
-        # Check for commands
-        case "$KEY" in
-            "back" )
-                BASE_DIR=""; COMP_DIR=""; COPY_DIR=""
-                HASH_ALGO=0; OUTP_OPT=0; DB_DELETE=0 ;;
-            "enter" ) break ;;
-            "quit" )  quit ;;
-        esac
+            # Read key input
+            read_key
+
+            # Check for commands
+            case "$KEY" in
+                "back" )
+                    BASE_DIR=""; COMP_DIR=""; COPY_DIR=""
+                    HASH_ALGO=0; OUTP_OPT=0; DB_DELETE=0
+                    break ;;
+                "enter" ) break 2 ;;
+                "quit" )  quit ;;
+            esac
+
+        done
 
     done
 
