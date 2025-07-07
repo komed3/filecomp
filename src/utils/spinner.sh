@@ -4,6 +4,8 @@
 source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
 
+declare -A SLINE
+declare -A STEXT
 SPID=0
 
 # Function to start a spinner
@@ -33,6 +35,9 @@ start_spinner () {
 
     ) & SPID=$!
 
+    SLINE[$SPID]=$1
+    STEXT[$SPID]=$2
+
 }
 
 # Function to stop the spinner from the given Process ID
@@ -40,5 +45,8 @@ stop_spinner () {
 
     kill "$1" 2>/dev/null
     wait "$1" 2>/dev/null
+
+    set_line "${SLINE[$1]}"
+    printf "%s%s%s" "$GREEN" "${STEXT[$1]} … DONE" "$RESET"
 
 }
