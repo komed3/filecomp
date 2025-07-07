@@ -24,7 +24,7 @@ create_hashdb () {
     esac
 
     # Print actions
-    print_actions "SPACE::Pause"
+    print_actions
 
     # Print the title
     print_title "CREATE INITIAL HASH DATABASE USING $algo"
@@ -64,6 +64,7 @@ create_hashdb () {
         local i
         for (( i=0; i < total; i++ )); do
 
+            # Get file
             local file="${files[$i]}"
 
             # Calculate hash and save to database
