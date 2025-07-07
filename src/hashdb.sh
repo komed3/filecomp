@@ -35,7 +35,7 @@ create_hashdb () {
     # Print initial log messages
     update_log "Scanning directory: ${BOLD}${BASE_DIR}${RESET}"
     update_log "This may take some time …"
-    update_log "";
+    update_log ""
 
     # Collect all regular files (exclude broken symlinks etc.)
     mapfile -t files < <( find "$BASE_DIR" -type f -readable -print )
@@ -57,6 +57,7 @@ create_hashdb () {
         progress_init $total
 
         # Create/overwrite hash database
+        update_log "Initiate hash database: ${HASH_DB} …"
         : > "$HASH_DB"
 
         # Loop trought files
