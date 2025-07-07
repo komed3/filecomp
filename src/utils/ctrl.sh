@@ -46,7 +46,7 @@ read_key () {
             $' ' )           KEY="space" ;;
             $'\n'|$'\r'|"" ) KEY="enter" ;;
             $'\t' )          KEY="tab" ;;
-            $'\b' )          KEY="back" ;;
+            $'\b'|$'\x7f' )  KEY="back" ;;
             * )              KEY=0
         esac
 
