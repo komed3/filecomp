@@ -33,15 +33,18 @@ hashdir_recursive () {
                 local hash_value="${hash_output%% *}"
                 echo "$hash_value $file" >> "$HASH_DB"
                 progress_update $(( ++HASH_PG ))
+                (( i++ ))
             fi
         fi
 
-        (( i++ ))
         may_quit
 
     done
 
-    update_log "${BOLD}${i}${RESET} files were hashed …"
+    # Log the number of files hashed in this directory
+    if (( i > 0 )); then
+        update_log "${BOLD}${i}${RESET} files were hashed …"
+    fi
 
     # Recurse into subdirectories
     local sub
