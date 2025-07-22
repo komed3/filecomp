@@ -96,7 +96,7 @@ create_hashdb () {
     else
 
         # Log the number of files
-        update_log "Found ${GREEN}${BOLD}${total}${RESET} files, proceed now …"
+        update_log "Found ${BOLD}${total}${RESET} files, proceed now …"
 
         # Start progress bar
         progress_init $total
