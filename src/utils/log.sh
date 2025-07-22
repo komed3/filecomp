@@ -6,40 +6,79 @@ source "$SCRIPT_DIR/utils/ui.sh"
 
 # Internal buffer
 LOG=()
+LOG_TYPE=()
+LOG_SPINNER_PID=()
+LOG_LAST=$START
 
-# Clear the log view entirely
-clear_log () {
-    for (( i=START; i <= END; i++ )); do set_line $i; done
-    LOG=()
-}
-
-# Add a new line to the live log
 update_log () {
 
-    # Append to buffer
-    LOG+=( "$1" );
+    LOG+=( "$1" )
+    LOG_TYPE+=( "${2:-"text"}" )
+    LOG_SPINNER_PID+=( "" )
 
-    # Remove oldest if over capacity
-    while (( ${#LOG[@]} > HEIGHT )); do
-        LOG=( "${LOG[@]:1}" )
+    local idx=$(( ${#LOG[@]} - 1 ))
+    local line=$(( $START + $idx ))
+
+    print_log_line "$line" "${LOG[$idx]}"
+
+    LOG_LAST=$line
+
+}
+
+print_log_line () {
+
+    local line="$1"
+    local msg="$2"
+
+    if (( ${#msg} > WIDTH )); then
+        local half=$(( ( $WIDTH - 8 ) / 2 ))
+        msg="${msg:0:$half}…${msg: -$half}"
+    fi
+
+    set_line "$line"; printf "%s" "$msg"
+
+}
+
+log_spinner_start () {
+
+    local msg="$1"
+
+    update_log "$msg" "spinner"
+    start_spinner $LOG_LAST "$msg"
+
+    LOG_SPINNER_PID[$LOG_LAST]="$SPID"
+
+}
+
+log_spinner_stop () {
+
+    local idx="$1"
+    local pid="${LOG_SPINNER_PID[$idx]}"
+
+    if [[ -n "$pid" ]]; then
+
+        stop_spinner "$pid"
+
+        LOG[$idx]="${LOG[$idx]} … DONE"
+        LOG_TYPE[$idx]="text"
+        LOG_SPINNER_PID[$idx]=""
+
+        print_log_line $(( $START + $idx )) "${LOG[$idx]}"
+
+    fi
+
+}
+
+clear_log () {
+
+    for pid in "${LOG_SPINNER_PID[@]}"; do
+        [[ -n "$pid" ]] && kill "$pid" 2>/dev/null
     done
 
-    # Draw updated log
-    local i
-    for (( i=0; i < ${#LOG[@]}; i++ )); do
+    LOG=()
+    LOG_TYPE=()
+    LOG_SPINNER_PID=()
 
-        local line=$(( $START + $i ))
-        local msg="${LOG[$i]}"
-
-        # Truncate overly long lines (middle ellipsis)
-        if (( ${#msg} > WIDTH )); then
-            local half=$(( ( $WIDTH - 1 ) / 2 ))
-            msg="${msg:0:$half}…${msg: -$half}"
-        fi
-
-        # Print the line
-        set_line $line; printf "%s" "$msg"
-
-    done
+    for (( i=START; i <= END; i++ )); do set_line $i; done
 
 }
