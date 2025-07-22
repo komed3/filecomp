@@ -25,7 +25,7 @@ hashdir_recursive () {
     update_log "Processing directory: ${YELLOW}${dir}${RESET} …"
 
     # Hash all regular files in this directory (non-recursive)
-    local file
+    local file i=0
     for file in "$dir"/*; do
 
         if [[ -f "$file" && -r "$file" ]]; then
@@ -36,9 +36,12 @@ hashdir_recursive () {
             fi
         fi
 
+        (( i++ ))
         may_quit
 
     done
+
+    update_log "${BOLD}${i}${RESET} files were hashed …"
 
     # Recurse into subdirectories
     local sub
@@ -78,7 +81,7 @@ create_hashdb () {
     clear_log
 
     # Print initial log messages
-    update_log "Scanning directory: ${YELLOW}${BASE_DIR}${RESET}"
+    update_log "Scanning directory: ${YELLOW}${BASE_DIR}${RESET} …"
     update_log "This may take some time …"
     update_log ""
 
@@ -102,7 +105,8 @@ create_hashdb () {
         progress_init $total
 
         # Create/overwrite hash database
-        update_log "Initiate hash database: ${YELLOW}${HASH_DB}${RESET}"
+        update_log "Initiate hash database: ${YELLOW}${HASH_DB}${RESET} …"
+        update_log ""
         : > "$HASH_DB"
 
         # Start recursive hashing
@@ -110,7 +114,9 @@ create_hashdb () {
 
         # Finish the process
         progress_finish
-        update_log "${GREEN}Hash database created: ${BOLD}${HASH_DB}${RESET}"
+        update_log ""
+        update_log "${GREEN}Hash database was created successfully${RESET}"
+        update_log "${GREEN}Finished after ${BOLD}$( progress_duration )${RESET}"
         status=0
 
     fi
