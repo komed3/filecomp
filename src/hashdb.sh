@@ -110,7 +110,7 @@ create_hashdb () {
 
         # Finish the process
         progress_finish
-        update_log "${GREEN}Hash database created: ${$BOLD}${HASH_DB}${RESET}"
+        update_log "${GREEN}Hash database created: ${BOLD}${HASH_DB}${RESET}"
         status=0
 
     fi
