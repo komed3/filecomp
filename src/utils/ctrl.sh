@@ -4,18 +4,15 @@
 source "$SCRIPT_DIR/utils/ui.sh"
 
 # Global variable to store the key pressed
-KEY=""
+KEY=0
 
-# Function to read a key from the terminal
+# Internal: Parse raw key input and set KEY variable
 # This function captures single key presses, including escape sequences for special keys.
 # It sets the global variable KEY to a readable name for the key pressed.
 # If no of the specified keys are pressed, KEY will be set to 0.
-read_key () {
+parse_key () {
 
-    local key rest seq
-
-    # Read raw terminal inputs
-    IFS= read -rsn1 key 2>/dev/null || return
+    local key="$1"
 
     # Escape sequence (arrow, function keys)
     if [[ "$key" == $'\e' ]]; then
@@ -52,8 +49,45 @@ read_key () {
 
     fi
 
-    # Catch all following inputs (e.g. if the button is held down)
+}
+
+# Internal: Clear the input buffer
+# Reading and discarding all characters within a very short timeout
+clear_buffer () {
     while IFS= read -rsn1 -t 0.001 _; do :; done
+}
+
+# Blocking: Wait for a key press and parse it
+read_key () {
+
+    local key
+
+    # Read raw terminal input
+    IFS= read -rsn1 key 2>/dev/null || return
+
+    # Parse terminal input
+    parse_key "$key"
+
+    # Clear the input buffer
+    clear_buffer
+
+}
+
+# Non-blocking: Only parse key if available, else KEY=0
+read_key_nonblock () {
+
+    local key
+
+    # Check for raw terminal input
+    if IFS= read -rsn1 -t 0.001 key 2>/dev/null; then
+
+        # Parse terminal input
+        parse_key "$key"
+
+        # Clear the input buffer
+        clear_buffer
+
+    else KEY=0; fi
 
 }
 
