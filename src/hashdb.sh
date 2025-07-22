@@ -10,6 +10,43 @@ source "$SCRIPT_DIR/utils/ctrl.sh"
 # Path for storing hash values
 HASH_DB="$PWD/.filecomp_hashdb"
 
+# Hashing progress
+HASH_PG=0
+
+# Recursively hash all files in a directory
+# Arguments:
+#   $1: Directory to process
+#   $2: Command to use for hashing (e.g., sha256sum)
+hashdir_recursive () {
+
+    local dir="$1"
+    local cmd="$2"
+
+    update_log "Processing directory: ${BOLD}${dir}${RESET}"
+
+    # Hash all regular files in this directory (non-recursive)
+    local file
+    for file in "$dir"/*; do
+        if [[ -f "$file" && -r "$file" ]]; then
+            if hash_output=$( "$cmd" "$file" 2>/dev/null ); then
+                local hash_value="${hash_output%% *}"
+                echo "$hash_value $file" >> "$HASH_DB"
+                progress_update $(( ++HASH_PG ))
+            fi
+        fi
+    done
+
+    # Recurse into subdirectories
+    local sub
+    for sub in "$dir"/*; do
+        if [[ -d "$sub" && -r "$sub" ]]; then
+            hashdir_recursive "$sub" "$cmd"
+        fi
+    done
+
+}
+
+# Create a hash database for all files in the given directory
 create_hashdb () {
 
     # Determine hash command
@@ -60,32 +97,12 @@ create_hashdb () {
         update_log "Initiate hash database: ${HASH_DB} …"
         : > "$HASH_DB"
 
-        # Loop trought files
-        local i
-        for (( i=0; i < total; i++ )); do
-
-            # Get file
-            local file="${files[$i]}"
-
-            # Calculate hash and save to database
-            if hash_output=$( "$cmd" "$file" 2>/dev/null ); then
-
-                local hash_value="${hash_output%% *}"
-
-                # Log the hashed file
-                echo "$hash_value $file" >> "$HASH_DB"
-                update_log "Indexed: ${file}"
-
-            # If the hashing failed, log it
-            else update_log "${RED}Failed: ${file}${RESET}"; fi
-
-            # Update progress bar
-            progress_update $(( $i + 1 ))
-
-        done
+        # Start recursive hashing
+        hashdir_recursive "$BASE_DIR" "$cmd"
 
         # Finish the process
-        progress_finish; update_log "${GREEN}Hash database created: ${HASH_DB}${RESET}"
+        progress_finish
+        update_log "${GREEN}Hash database created: ${HASH_DB}${RESET}"
         status=0
 
     fi
