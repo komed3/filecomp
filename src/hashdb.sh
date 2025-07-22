@@ -22,11 +22,12 @@ hashdir_recursive () {
     local dir="$1"
     local cmd="$2"
 
-    update_log "Processing directory: ${BOLD}${dir}${RESET}"
+    update_log "Processing directory: ${YELLOW}${dir}${RESET} …"
 
     # Hash all regular files in this directory (non-recursive)
     local file
     for file in "$dir"/*; do
+
         if [[ -f "$file" && -r "$file" ]]; then
             if hash_output=$( "$cmd" "$file" 2>/dev/null ); then
                 local hash_value="${hash_output%% *}"
@@ -34,14 +35,21 @@ hashdir_recursive () {
                 progress_update $(( ++HASH_PG ))
             fi
         fi
+
+        may_quit
+
     done
 
     # Recurse into subdirectories
     local sub
     for sub in "$dir"/*; do
+
         if [[ -d "$sub" && -r "$sub" ]]; then
             hashdir_recursive "$sub" "$cmd"
         fi
+
+        may_quit
+
     done
 
 }
@@ -64,13 +72,13 @@ create_hashdb () {
     print_actions
 
     # Print the title
-    print_title "CREATE INITIAL HASH DATABASE USING $algo"
+    print_title "CREATE INITIAL HASH DATABASE USING ${BOLD}${algo}${RESET}"
 
     # Clear the live log
     clear_log
 
     # Print initial log messages
-    update_log "Scanning directory: ${BOLD}${BASE_DIR}${RESET}"
+    update_log "Scanning directory: ${YELLOW}${BASE_DIR}${RESET}"
     update_log "This may take some time …"
     update_log ""
 
@@ -81,20 +89,20 @@ create_hashdb () {
     # Print error msg if no readable files where found
     if (( total == 0 )); then
 
-        update_log "${RED}No readable files found in: ${BASE_DIR}${RESET}"
+        update_log "${RED}No readable files found in: ${BOLD}${BASE_DIR}${RESET}"
         status=1
 
     # Proceed the files
     else
 
         # Log the number of files
-        update_log "Found ${BOLD}${total}${RESET} files, proceed now …"
+        update_log "Found ${GREEN}${BOLD}${total}${RESET} files, proceed now …"
 
         # Start progress bar
         progress_init $total
 
         # Create/overwrite hash database
-        update_log "Initiate hash database: ${HASH_DB} …"
+        update_log "Initiate hash database: ${YELLOW}${HASH_DB}${RESET}"
         : > "$HASH_DB"
 
         # Start recursive hashing
@@ -102,7 +110,7 @@ create_hashdb () {
 
         # Finish the process
         progress_finish
-        update_log "${GREEN}Hash database created: ${HASH_DB}${RESET}"
+        update_log "${GREEN}Hash database created: ${$BOLD}${HASH_DB}${RESET}"
         status=0
 
     fi

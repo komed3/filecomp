@@ -96,6 +96,17 @@ quit () {
     reset_env
 }
 
+# Check if the user wants to quit
+may_quit () {
+
+    # Read key input non-blocking
+    KEY=0; read_key_nonblock
+
+    # If the quit key is pressed, exit the script
+    if [[ "$KEY" == "quit" ]]; then quit; fi
+
+}
+
 # Wait for the user to press enter to proceed or quit the script
 await_to_proceed () {
 
