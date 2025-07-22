@@ -110,10 +110,15 @@ may_quit () {
 # Wait for the user to press enter to proceed or quit the script
 await_to_proceed () {
 
+    KEY=0
+
     while true; do
 
+        # Read key input
         read_key
 
+        # If the user pressed enter, break the loop
+        # If the user pressed quit, exit the script
         case "$KEY" in
             "enter" ) break ;;
             "quit" )  quit ;;
