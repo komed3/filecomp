@@ -92,3 +92,27 @@ progress_finish () {
     BAR_LAST_DRAWN=0
     progress_update $TOTAL_ITEMS
 }
+
+# Returns the elapsed time since progress_init as a formatted string
+progress_duration () {
+
+    # Get the current time and calculate elapsed time
+    local now=$( date +%s )
+    local elapsed=$(( $now - $BAR_START_TIME ))
+
+    # Format the elapsed time into hours, minutes, and seconds
+    local h=$(( $elapsed / 3600 ))
+    local m=$(( ( $elapsed % 3600 ) / 60 ))
+    local s=$(( $elapsed % 60 ))
+
+    # Create a formatted string for the elapsed time
+    # Only include non-zero values
+    local out=""
+    (( h > 0 )) && out+="${h}h "
+    (( m > 0 )) && out+="${m}m "
+    out+="${s}s"
+
+    # Return the formatted elapsed time
+    echo "$out"
+
+}
