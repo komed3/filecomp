@@ -102,7 +102,7 @@ print_help () {
 
         # Check for commands
         case "$KEY" in
-            "tab" ) tab=$(( ( $tab + 1 ) % $max )) ;;
+            "tab" )   tab=$(( ( $tab + 1 ) % $max )) ;;
             "enter" ) break ;;
             "quit" )  quit ;;
         esac

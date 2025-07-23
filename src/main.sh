@@ -12,6 +12,7 @@ source "$SCRIPT_DIR/help.sh"
 source "$SCRIPT_DIR/config.sh"
 source "$SCRIPT_DIR/hashdb.sh"
 source "$SCRIPT_DIR/filecmp.sh"
+source "$SCRIPT_DIR/result.sh"
 
 # Main container function
 # This function orchestrates the execution of the script
@@ -39,6 +40,9 @@ main () {
 
     # Compare files against database
     compare_files
+
+    # Print the result screen
+    print_result
 
     # Reset the environment to quit safely
     reset_env
