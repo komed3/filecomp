@@ -15,6 +15,7 @@ BAR_EMPTY=" "
 # Status vars
 SPINNER_INDEX=0
 TOTAL_ITEMS=0
+PROCESSED_ITEMS=0
 ETA="--:--:--"
 BAR_START_TIME=0
 BAR_LAST_DRAWN=0
@@ -25,6 +26,7 @@ progress_init () {
 
     SPINNER_INDEX=0
     TOTAL_ITEMS=$1
+    PROCESSED_ITEMS=0
     ETA="--:--:--"
 
     BAR_START_TIME=$( date +%s )
@@ -43,12 +45,12 @@ progress_update () {
 
     if (( delta < BAR_DRAW_INTERVAL )); then return; fi
 
+    PROCESSED_ITEMS=$1
     BAR_LAST_DRAWN=$ts
 
     # Calculate the current progress
     local now=$( date +%s )
     local elapsed=$(( $now - $BAR_START_TIME ))
-    local cur=$1
 
     # Get the current spinner character
     local spinner=${SPINNER_CHARS[$SPINNER_INDEX]}
@@ -58,12 +60,12 @@ progress_update () {
     SPINNER_INDEX=$(( ( $SPINNER_INDEX + 1 ) % ${#SPINNER_CHARS[@]} ))
 
     # Calculate the percentage and remaining time
-    local pct=$(( $cur * 100 / $TOTAL_ITEMS ))
+    local pct=$(( $PROCESSED_ITEMS * 100 / $TOTAL_ITEMS ))
 
     if (( pct == 100 )); then spinner="✔"; fi;
 
-    if (( SPINNER_INDEX % 50 == 0 && cur > 0 )); then
-        local eta=$(( $elapsed * ( $TOTAL_ITEMS - $cur ) / $cur ))
+    if (( SPINNER_INDEX % 50 == 0 && PROCESSED_ITEMS > 0 )); then
+        local eta=$(( $elapsed * ( $TOTAL_ITEMS - $PROCESSED_ITEMS ) / $PROCESSED_ITEMS ))
         ETA=$( date -u -d "@$eta" +%H:%M:%S )
     fi
 
@@ -99,11 +101,12 @@ progress_duration () {
     # Get the current time and calculate elapsed time
     local now=$( date +%s )
     local elapsed=$(( $now - $BAR_START_TIME ))
+    (( elapsed == 0 )) && elapsed=1
 
     # Format the elapsed time into hours, minutes, and seconds
-    local h=$(( $elapsed / 3600 ))
-    local m=$(( ( $elapsed % 3600 ) / 60 ))
-    local s=$(( $elapsed % 60 ))
+    local -i h=$(( $elapsed / 3600 ))
+    local -i m=$(( ( $elapsed % 3600 ) / 60 ))
+    local -i s=$(( $elapsed % 60 ))
 
     # Create a formatted string for the elapsed time
     # Only include non-zero values
@@ -114,5 +117,18 @@ progress_duration () {
 
     # Return the formatted elapsed time
     echo "$out"
+
+}
+
+# Returns the current processing rate in items per second
+progress_rate () {
+
+    # Get the current time and calculate elapsed time
+    local now=$( date +%s )
+    local elapsed=$(( $now - $BAR_START_TIME ))
+    (( elapsed == 0 )) && elapsed=1
+
+    # Calculate and return the processing rate
+    echo $(( $PROCESSED_ITEMS / $elapsed ))
 
 }
