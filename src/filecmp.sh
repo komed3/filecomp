@@ -7,6 +7,9 @@ source "$SCRIPT_DIR/utils/log.sh"
 source "$SCRIPT_DIR/utils/progress.sh"
 source "$SCRIPT_DIR/utils/ctrl.sh"
 
+# Path for log file
+LOG_FILE="$PWD/.filecomp_unique.log"
+
 # Compare files against the hash database
 compare_files () {
 
@@ -47,6 +50,36 @@ compare_files () {
 
         # Start progress bar
         progress_init $total
+
+        # Load hash database into associative array for fast lookup
+        update_log "Load hash database into associative array for fast lookup …"
+        declare -A HASHES
+        while read -r hash path; do HASHES["$hash"]=1; done < "$HASH_DB"
+
+        # Prepare log file if needed
+        if (( $OUTP_OPT != 1 )); then
+            update_log "Initiate log file: ${YELLOW}${LOG_FILE}${RESET} …"
+            : > "$LOG_FILE"
+        fi
+
+        # Create copy dir if needed
+        if (( $OUTP_OPT != 0 )); then
+            update_log "Create copy dir: ${YELLOW}${COPY_DIR}${RESET} …"
+            mkdir -p "$COPY_DIR"
+        fi
+
+        update_log "";
+
+        # Loop trought files
+        local -i unique=0
+        local -i next_log=0
+        local -i i
+
+        for (( i=0; i < total; i++ )); do
+
+            # ...
+
+        done
 
     fi
 
