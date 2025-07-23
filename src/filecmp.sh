@@ -127,4 +127,7 @@ compare_files () {
     # Await user input
     await_to_proceed
 
+    # Clear progress bar
+    progress_clear
+
 }
