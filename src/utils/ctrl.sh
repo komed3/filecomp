@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load utility scripts
-source "$SCRIPT_DIR/utils/ui.sh"
+source "$SCRIPT_DIR/utils/env.sh"
 
 # Global variable to store the key pressed
 KEY=0
