@@ -57,9 +57,7 @@ create_hashdb () {
         : > "$HASH_DB"
 
         # Loop trought files
-        local -i next_log=0
         local -i i
-
         for (( i=0; i < total; i++ )); do
 
             # Use a subshell to avoid blocking the main script
@@ -76,12 +74,6 @@ create_hashdb () {
 
             # Update progress bar
             progress_update $(( $i + 1 ))
-
-            # Log current progress rate (only if more than 10k files)
-            if (( total > 10000 && i * 10 / total > next_log )); then
-                update_log "${BOLD}${i}${RESET} of ${BOLD}${total}${RESET} files processed, $( progress_rate ) files/sec …"
-                next_log=$(( $i * 10 / $total ))
-            fi
 
             # Check for non-blocking user input to quit
             may_quit
