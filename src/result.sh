@@ -12,7 +12,7 @@ delete_results () {
     print_title "DELETE RESULTS"
 
     # Clear the screen
-    print_actions; clear_content
+    clear_content; clear_actions
 
     printf "%s%sNow all results and files will be deleted!%s\n" "$PRFX" "$RED" "$RESET"
     printf "%s%sAfterwards the program will quit.%s\n" "$PRFX" "$RED" "$RESET"

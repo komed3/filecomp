@@ -79,3 +79,8 @@ print_actions () {
     done
 
 }
+
+# Clear all actions at the bottom of the screen
+clear_actions () {
+    set_line $(( $ROWS - 3 ))
+}
