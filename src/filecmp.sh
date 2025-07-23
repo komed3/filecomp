@@ -126,7 +126,7 @@ compare_files () {
         done
 
         # Finish the process
-        wait; rm "$SCRIPT_DIR/.lock"; progress_finish; status=0
+        wait; progress_finish; status=0
         update_log ""
         update_log "${GREEN}Comparison finished: ${BOLD}${unique} unique files${RESET}"
         update_log "${GREEN}Finished after ${BOLD}$( progress_duration )${RESET}"
