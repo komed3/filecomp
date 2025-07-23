@@ -53,7 +53,7 @@ select_comp_dir () {
 # Set the directory for copying unique files to
 select_copy_dir () {
 
-    if (( OUTP_OPT != 0 )) then
+    if (( OUTP_OPT != 0 )); then
 
         # Print the title
         print_title "SELECT DIRECTORY TO COPY UNIQUE FILES TO"
@@ -179,9 +179,9 @@ check_options () {
 
     done
 
-    printf "\n%sAbort by %squitting%s the program, use %sBackspace%s to correct inputs." \
+    printf "\n%sAbort by %s[q]uitting%s the program, use %s[Backspace]%s to correct inputs." \
         "$PRFX" "$BOLD" "$RESET" "$BOLD" "$RESET"
-    printf "\n%sHit %sEnter%s when ready to proceed." "$PRFX" "$BOLD" "$RESET"
+    printf "\n%sHit %s[Enter]%s when ready to proceed." "$PRFX" "$BOLD" "$RESET"
 
 }
 

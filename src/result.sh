@@ -28,7 +28,9 @@ delete_results () {
 # Print the result screen and list all unique files
 print_result () {
 
-    local tab=0 prev=-1 max=0 screen=()
+    local unique=$( wc -l < "$TMP_FILE" )
+    local tab=0 prev=-1
+    local max=$(( ( $unique / $HEIGHT ) + 1 ))
 
     # Print actions
     print_actions "TAB::Page" "BACK::Delete Results" "Q::Quit"
@@ -38,8 +40,51 @@ print_result () {
 
     while true; do
 
-        # Clear the screen
-        clear_content
+        # Render only if the tab has changed
+        if (( prev != tab )); then
+
+            # Clear the screen
+            clear_content
+
+            # Info page
+            if (( tab == 0 )); then
+
+                local info_label=(
+                    "Base directory" "Compare with  "
+                    "Hash database " "Unique files  "
+                )
+
+                local info_value=(
+                    "$BASE_DIR" "$COMP_DIR"
+                    "$( stat -c %s "$HASH_DB" 2>/dev/null || echo 0 ) bytes"
+                    "${unique} files"
+                )
+
+                # Print list of info
+                for i in "${!info_label[@]}"; do
+
+                    printf "%s%s  :  %s%s%s\n" \
+                        "$PRFX" "${info_label[$i]}" \
+                        "$CYAN$BOLD" "${info_value[$i]:-"N/A"}" \
+                        "$RESET"
+
+                done
+
+                printf "\n%sUse %s[Tab]%s to view all unique files." "$PRFX" "$BOLD" "$RESET"
+                printf "\n%sDelete all files and results by pressing %s[Backspace]%s." "$PRFX" "$BOLD" "$RESET"
+                printf "\n%sExit the program with %s[Q]%s." "$PRFX" "$BOLD" "$RESET"
+
+            # File page
+            #else
+
+                # ...
+
+            fi
+
+            # Set previous tab to current
+            prev=$tab
+
+        fi
 
         # Read key input
         read_key

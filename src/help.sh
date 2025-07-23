@@ -38,8 +38,8 @@ print_help () {
                     "6) (Optional) Select folder to copy unique files."
                     "7) Decide whether to keep or delete hash DB."
                     ""
-                    "Use ${BOLD}arrow keys${RESET} and ${BOLD}Enter${RESET} to navigate menus."
-                    "Press ${BOLD}Q${RESET} anytime to quit."
+                    "Use ${BOLD}arrow keys${RESET} and ${BOLD}[Enter]${RESET} to navigate menus."
+                    "Press ${BOLD}[Q]${RESET} anytime to quit."
                 ) ;;
 
                 # Functions
