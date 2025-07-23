@@ -72,7 +72,7 @@ print_actions () {
 
     local actions=( "$@" )
 
-    set_line $(( $ROWS - 3 ))
+    clear_actions
 
     for action in "${actions[@]}"; do
         printf "%s %s %s  " "$REVID" "$action" "$RESET"

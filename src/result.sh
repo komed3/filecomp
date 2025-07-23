@@ -11,8 +11,9 @@ delete_results () {
     # Print the title
     print_title "DELETE RESULTS"
 
-    # Clear the screen
-    clear_content; clear_actions
+    # Clear the actions & screen
+    clear_actions
+    clear_content
 
     printf "%s%sNow all results and files will be deleted!%s\n" "$PRFX" "$RED" "$RESET"
     printf "%s%sAfterwards the program will quit.%s\n" "$PRFX" "$RED" "$RESET"
@@ -24,7 +25,7 @@ delete_results () {
     [[ -n "$COPY_DIR" && -d "$COPY_DIR" ]] && rm -rf "$COPY_DIR"
 
     # Quit the program
-    sleep 5; quit
+    sleep 3; quit
 
 }
 
