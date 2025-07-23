@@ -13,9 +13,11 @@ COMP_DIR=""
 COPY_DIR=""
 
 HASH_ALGO=0
+N_THREADS=0
 OUTP_OPT=0
 DB_DELETE=0
 
+THREAD_OPTS=( "No, only <one> thread" "Yes, use <all (${MAX_THREADS})> threads" )
 OUTP_OPTS=( "Write files to log" "Copy files to new directory" "Both options" )
 DB_DELETE_OPTS=( "Keep it" "Delete it" )
 
@@ -79,6 +81,24 @@ set_hash_algo () {
 
 }
 
+# Set the number of threads on which FileComp will run
+set_threads () {
+
+    # Print the title
+    print_title "RUN FILECOMP MULTITHREADED?"
+
+    for (( i=2; i < MAX_THREADS; i *= 2 )); do
+        THREAD_OPTS+=( "Yes, use <${i}> threads" )
+    done
+
+    # Menu to select the number of threads
+    select_menu 0 1 0 THREAD_OPTS
+
+    # Save the selected number of threads
+    N_THREADS=${result[0]}
+
+}
+
 # Set the option for dealing with unique files
 set_output_option () {
 
@@ -121,6 +141,7 @@ check_options () {
     local check_label=(
         "Base directory" "Compare with  " "Copy unique to"
         "Hash algorithm" "Output option " "Hash database "
+        "Multithreading"
     )
 
     local check_value=(
@@ -128,6 +149,7 @@ check_options () {
         "${AVAILABLE_HASHES[$HASH_ALGO]}"
         "${OUTP_OPTS[$OUTP_OPT]}"
         "${DB_DELETE_OPTS[$DB_DELETE]}"
+        "${THREAD_OPTS[$N_THREADS]}"
     )
 
     # Print list of options
@@ -163,13 +185,16 @@ config_loop () {
         # Step 3: Set hash algorithm
         set_hash_algo
 
-        # Step 4: Select output option
+        # Step 4: Select number of threads
+        set_threads
+
+        # Step 5: Select output option
         set_output_option
 
-        # Step 4a: If needed, select copy directory
+        # Step 5a: If needed, select copy directory
         select_copy_dir
 
-        # Step 5: Keep or delete database
+        # Step 6: Keep or delete database
         keep_or_delete_db
 
         # Check inputs / options
