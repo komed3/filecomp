@@ -31,7 +31,7 @@ select_base_dir () {
     select_folder $HOME
 
     # Save the selected directory
-    BASE_DIR=$result
+    BASE_DIR="$result"
 
 }
 
@@ -45,7 +45,7 @@ select_comp_dir () {
     select_folder $HOME
 
     # Save the selected directory
-    COMP_DIR=$result
+    COMP_DIR="$result"
 
 }
 
@@ -61,7 +61,7 @@ select_copy_dir () {
         select_folder $HOME
 
         # Save the selected directory
-        COPY_DIR=$result
+        COPY_DIR="$result/filecomp"
 
     fi
 
