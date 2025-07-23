@@ -8,8 +8,11 @@ source "$SCRIPT_DIR/utils/ctrl.sh"
 # Delete all results and files
 delete_results () {
 
+    # Print the title
+    print_title "DELETE RESULTS"
+
     # Clear the screen
-    clear_content
+    print_actions; clear_content
 
     printf "%s%sNow all results and files will be deleted!%s\n" "$PRFX" "$RED" "$RESET"
     printf "%s%sAfterwards the program will quit.%s\n" "$PRFX" "$RED" "$RESET"
@@ -94,7 +97,7 @@ print_result () {
                 (( end_idx >= unique )) && end_idx=$(( $unique - 1 ))
 
                 set_line $START
-                printf "Unique files %s[%d/%d]%s\n\n" "$REVID" "$tab" "$(( $max - 1 ))" "$RESET"
+                printf "Unique files   %s[%d/%d]%s\n\n" "$REVID" "$tab" "$(( $max - 1 ))" "$RESET"
 
                 for (( i=start_idx; i <= end_idx && i < unique; i++ )); do
                     printf "%s%s\n" "$PRFX" "${unique_files[$i]}"
