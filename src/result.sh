@@ -8,7 +8,20 @@ source "$SCRIPT_DIR/utils/ctrl.sh"
 # Delete all results and files
 delete_results () {
 
-    # ...
+    # Clear the screen
+    clear_content
+
+    printf "%s%sNow all results and files will be deleted!%s\n" "$PRFX" "$RED" "$RESET"
+    printf "%s%sAfterwards the program will quit.%s\n" "$PRFX" "$RED" "$RESET"
+
+    # Remove the hash database and log file
+    rm -f "$HASH_DB" "$LOG_FILE"
+
+    # Remove the copy directory if it exists
+    [[ -n "$COPY_DIR" && -d "$COPY_DIR" ]] && rm -rf "$COPY_DIR"
+
+    # Quit the program
+    sleep 5; quit
 
 }
 
