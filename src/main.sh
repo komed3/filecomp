@@ -11,6 +11,7 @@ source "$SCRIPT_DIR/utils/ui.sh"
 source "$SCRIPT_DIR/help.sh"
 source "$SCRIPT_DIR/config.sh"
 source "$SCRIPT_DIR/hashdb.sh"
+source "$SCRIPT_DIR/filecmp.sh"
 
 # Main container function
 # This function orchestrates the execution of the script
@@ -35,6 +36,9 @@ main () {
 
     # Create the hash database
     create_hashdb
+
+    # Compare files against database
+    compare_files
 
     # Reset the environment to quit safely
     reset_env
