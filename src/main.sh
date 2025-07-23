@@ -17,6 +17,7 @@ source "$SCRIPT_DIR/hashdb.sh"
 main () {
 
     # Check environment and dependencies
+    check_threads
     check_available_hashes
 
     # Set up the environment

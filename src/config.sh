@@ -17,7 +17,7 @@ N_THREADS=0
 OUTP_OPT=0
 DB_DELETE=0
 
-THREAD_OPTS=( "No, only <one> thread" "Yes, use <all (${MAX_THREADS})> threads" )
+THREAD_OPTS=()
 OUTP_OPTS=( "Write files to log" "Copy files to new directory" "Both options" )
 DB_DELETE_OPTS=( "Keep it" "Delete it" )
 
@@ -87,9 +87,16 @@ set_threads () {
     # Print the title
     print_title "RUN FILECOMP MULTITHREADED?"
 
-    for (( i=2; i < MAX_THREADS; i *= 2 )); do
-        THREAD_OPTS+=( "Yes, use <${i}> threads" )
-    done
+    # Populate THREAD_OPTS, if not already done
+    if (( ${#THREAD_OPTS[@]} == 0 )); then
+        for th in "${THREADS[@]}"; do
+            if (( th > 1 )); then
+                THREAD_OPTS+=( "Yes, use <${th}> threads" )
+            else
+                THREAD_OPTS+=( "No, run single-threaded" )
+            fi
+        done
+    fi
 
     # Menu to select the number of threads
     select_menu 0 1 0 THREAD_OPTS

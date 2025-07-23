@@ -1,8 +1,25 @@
 #!/bin/bash
 
 # Environment variables
+MAX_THREADS=1
+THREADS=()
 AVAILABLE_HASHES=()
-MAX_THREADS=$( nproc 2>/dev/null || echo 1 )
+
+# Check available threads and populate THREADS
+check_threads () {
+
+    # Get the maximum number of threads available
+    MAX_THREADS=$( nproc 2>/dev/null || echo 1 )
+
+    # Loop through powers of 2 up to MAX_THREADS
+    for (( i=1; i < MAX_THREADS; i *= 2 )); do
+        THREADS+=( $i )
+    done
+
+    # Add the maximum threads option
+    THREADS+=( $MAX_THREADS )
+
+}
 
 # Check available hash commands and populate AVAILABLE_HASHES
 check_available_hashes () {
