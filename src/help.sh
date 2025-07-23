@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/utils/ctrl.sh"
 # Help screen for FileComp
 print_help () {
 
-    local tab=0 prev=-1 max=3 help=()
+    local tab=0 prev=-1 max=3 screen=()
 
     # Print actions
     print_actions "TAB::Page" "ENTER::Proceed" "Q::Quit"
@@ -25,7 +25,7 @@ print_help () {
             case $tab in
 
                 # Overview / Intro
-                0 ) help=(
+                0 ) screen=(
                     "FileComp recursively compares two directories for unique files using their hash values."
                     "To accomplish this, the program runs through a series of steps."
                     ""
@@ -43,7 +43,7 @@ print_help () {
                 ) ;;
 
                 # Functions
-                1 ) help=(
+                1 ) screen=(
                     "FileComp operates carefully with your files and will neither change nor move them."
                     ""
                     "${BOLD}Hashing:${RESET}"
@@ -64,7 +64,7 @@ print_help () {
                 ) ;;
 
                 # Functions
-                2 ) help=(
+                2 ) screen=(
                     "Users are guided safely through the individual steps, no text input is necessary."
                     ""
                     "${BOLD}Navigation:${RESET}"
@@ -90,7 +90,7 @@ print_help () {
             clear_content
 
             # Print the help content line by line
-            for i in "${!help[@]}"; do printf "%s%s\n" "$PRFX" "${help[$i]}"; done
+            for i in "${!screen[@]}"; do printf "%s%s\n" "$PRFX" "${screen[$i]}"; done
 
             # Set previous tab to current
             prev=$tab
