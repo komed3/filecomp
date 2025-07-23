@@ -73,13 +73,10 @@ create_hashdb () {
 
         for (( i=0; i < total; i++ )); do
 
-            # Get file
-            local file="${files[$i]}"
-
             # Use a subshell to avoid blocking the main script
             # and to allow parallel execution
             (
-                if hash_output=$( "$cmd" "$file" 2>/dev/null ); then
+                if hash_output=$( "$cmd" "${files[$i]}" 2>/dev/null ); then
                     local hash_value="${hash_output%% *}"
                     echo "$hash_value ${files[$i]}" >> "$HASH_DB"
                 fi
@@ -103,11 +100,10 @@ create_hashdb () {
         done
 
         # Finish the process
-        progress_finish
+        wait; progress_finish; status=0
         update_log ""
         update_log "${GREEN}Hash database was created successfully${RESET}"
         update_log "${GREEN}Finished after ${BOLD}$( progress_duration )${RESET}"
-        status=0
 
     fi
 
