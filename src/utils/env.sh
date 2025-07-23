@@ -1,9 +1,38 @@
 #!/bin/bash
 
 # Environment variables
+TMP_FILE="${TMPDIR:-/tmp}/.filecomp"
 MAX_THREADS=1
 THREADS=()
 AVAILABLE_HASHES=()
+
+# Setup environment and trap exit signals to quit safely
+setup_env () {
+
+    ENV_STTY=$( stty -g )
+
+    trap 'reset_env' INT TERM EXIT
+
+    stty -icanon -echo min 1 time 0
+    clear; tput civis
+
+}
+
+# Reset environment and restore terminal settings
+reset_env () {
+
+    stty "$ENV_STTY"
+    tput sgr0; tput cnorm
+    rm "$TMP_FILE"
+
+    clear; exit 0
+
+}
+
+# Clear the temp file
+clear_tmp () {
+    : > "$TMP_FILE"
+}
 
 # Check available threads and populate THREADS
 check_threads () {

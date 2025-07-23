@@ -15,28 +15,6 @@ START=4
 END=$(( $ROWS - 6 ))
 HEIGHT=$(( $ROWS - 10 ))
 
-# Setup environment and trap exit signals to quit safely
-setup_env () {
-
-    ENV_STTY=$( stty -g )
-
-    trap 'reset_env' INT TERM EXIT
-
-    stty -icanon -echo min 1 time 0
-    clear; tput civis
-
-}
-
-# Reset environment and restore terminal settings
-reset_env () {
-
-    stty "$ENV_STTY"
-    tput sgr0; tput cnorm
-
-    clear; exit 0
-
-}
-
 # Jump to the content area
 jump_content () {
     tput cup $START 0

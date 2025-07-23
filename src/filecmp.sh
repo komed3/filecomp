@@ -2,12 +2,13 @@
 
 # Load utility scripts
 source "$SCRIPT_DIR/utils/colors.sh"
+source "$SCRIPT_DIR/utils/env.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
 source "$SCRIPT_DIR/utils/log.sh"
 source "$SCRIPT_DIR/utils/progress.sh"
 source "$SCRIPT_DIR/utils/ctrl.sh"
 
-# Path for log file
+# Path to log file
 LOG_FILE="$PWD/.filecomp_unique.log"
 
 # Compare files against the hash database
@@ -45,6 +46,9 @@ compare_files () {
 
     # Proceed the files
     else
+
+        # Clear temp file
+        clear_tmp
 
         # Log the number of files
         update_log "Found ${BOLD}${total}${RESET} files, proceed now …"
@@ -90,11 +94,9 @@ compare_files () {
                     if [[ -z "${HASHES[$hash_value]}" ]]; then
 
                         # File is unique, log it
-                        (
-                            flock 200
-                            if (( $OUTP_OPT != 1 )); then echo "$file" >> "$LOG_FILE"; fi
-                            if (( $OUTP_OPT != 0 )); then cp -a "$file" "$COPY_DIR/"; fi
-                        ) 200>"$logfile.lock"
+                        echo "$file" >> "$TMP_FILE"
+                        if (( $OUTP_OPT != 1 )); then echo "$file" >> "$LOG_FILE"; fi
+                        if (( $OUTP_OPT != 0 )); then cp -a "$file" "$COPY_DIR/"; fi
 
                     fi
 
@@ -116,7 +118,7 @@ compare_files () {
         # Finish the process
         wait; progress_finish; status=0
         update_log ""
-        update_log "${GREEN}Comparison finished: ${BOLD}$( wc -l < "$LOG_FILE" ) unique files${RESET}"
+        update_log "${GREEN}Comparison finished: ${BOLD}$( wc -l < "$TMP_FILE" ) unique files${RESET}"
         update_log "${GREEN}Finished after ${BOLD}$( progress_duration )${RESET}"
 
     fi
