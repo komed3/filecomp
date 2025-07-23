@@ -31,12 +31,14 @@ create_hashdb () {
     print_actions
 
     # Print the title
-    print_title "CREATE INITIAL HASH DATABASE USING ${BOLD}${algo} ON ${th} THREADS${RESET}"
+    print_title "CREATE INITIAL HASH DATABASE"
 
     # Clear the live log
     clear_log
 
     # Print initial log messages
+    update_log "Use ${BOLD}${algo}${RESET} hash algorithm"
+    update_log "Run hashing on ${BOLD}${th} thread(s)${RESET}"
     update_log "Scanning directory: ${YELLOW}${BASE_DIR}${RESET} …"
     update_log "This may take some time …"
     update_log ""
@@ -109,6 +111,7 @@ create_hashdb () {
 
     fi
 
+    # Await user input
     await_to_proceed
 
 }
