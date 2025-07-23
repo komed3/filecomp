@@ -7,7 +7,7 @@ To accomplish this, the program runs through a series of steps.
 (1) Select base directory.  
 (2) Select directory to compare.  
 (3) Choose hash algorithm (e.g., SHA1).  
-(4) Choose number of threads to run on.
+(4) Choose number of threads to run on.  
 (5) Choose output: log, copy, or both.  
 (6) (Optional) Select folder to copy unique files.  
 (7) Decide whether to keep or delete hash DB.
