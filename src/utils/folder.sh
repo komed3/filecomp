@@ -32,7 +32,7 @@ select_folder () {
     local pointer=0 prev=-1
 
     # Print actions
-    print_actions "UP/DN::Navigate" "LT/RT::Change directory" "PGUP/PGDN::Pages" "TAB::Home"
+    print_actions "UP/DN::Navigate" "LT/RT::Change directory" "PGUP/PGDN::Pages" "TAB::Home" "ENTER::Proceed" "Q::Quit"
 
     # Clear the content
     clear_content

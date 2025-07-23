@@ -11,7 +11,7 @@ print_help () {
     local tab=0 prev=-1 max=3 help=()
 
     # Print actions
-    print_actions "TAB::Page"
+    print_actions "TAB::Page" "ENTER::Proceed" "Q::Quit"
 
     # Print the title
     print_title "WELCOME TO FILECOMP"

@@ -17,7 +17,7 @@ create_hashdb () {
     local -i th=${THREADS[$N_THREADS]}
 
     # Print actions
-    print_actions
+    print_actions "Q::Quit"
 
     # Print the title
     print_title "CREATE INITIAL HASH DATABASE"
@@ -85,6 +85,7 @@ create_hashdb () {
         update_log ""
         update_log "${GREEN}Hash database was created successfully${RESET}"
         update_log "${GREEN}Finished after ${BOLD}$( progress_duration )${RESET}"
+        print_actions "ENTER::Proceed" "Q::Quit"
 
     fi
 

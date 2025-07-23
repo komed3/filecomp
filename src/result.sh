@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/utils/ctrl.sh"
 print_result () {
 
     # Print actions
-    print_actions "TAB::Page" "BACK::Delete Results"
+    print_actions "TAB::Page" "BACK::Delete Results" "Q::Quit"
 
     # Print the title
     print_title "RESULTS"

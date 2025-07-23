@@ -18,7 +18,7 @@ compare_files () {
     local -i th=${THREADS[$N_THREADS]}
 
     # Print actions
-    print_actions
+    print_actions "Q::Quit"
 
     # Print the title
     print_title "COMPARE FILES AGAINST DATABASE"
@@ -120,6 +120,7 @@ compare_files () {
         update_log ""
         update_log "${GREEN}Comparison finished: ${BOLD}$( wc -l < "$TMP_FILE" ) unique files${RESET}"
         update_log "${GREEN}Finished after ${BOLD}$( progress_duration )${RESET}"
+        print_actions "ENTER::Proceed" "Q::Quit"
 
     fi
 

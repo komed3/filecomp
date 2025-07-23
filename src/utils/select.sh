@@ -44,7 +44,7 @@ select_menu () {
     done
 
     # Print actions
-    print_actions "UP/DN::Navigate" "SPACE::Select"
+    print_actions "UP/DN::Navigate" "SPACE::Select" "ENTER::Proceed" "Q::Quit"
 
     # Clear the content
     clear_content

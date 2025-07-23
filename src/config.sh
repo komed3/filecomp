@@ -147,7 +147,7 @@ keep_or_delete_db () {
 check_options () {
 
     # Print actions
-    print_actions "BACK::Correct"
+    print_actions "BACK::Correct" "ENTER::Proceed" "Q::Quit"
 
     # Print the title
     print_title "CHECK YOUR INPUTS BEFORE PROCEED"

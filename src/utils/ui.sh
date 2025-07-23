@@ -70,7 +70,7 @@ print_title () {
 # The actions are passed as arguments, with "ENTER" and "Q" always included
 print_actions () {
 
-    local actions=( "$@" "ENTER::Proceed" "Q::Quit" )
+    local actions=( "$@" )
 
     set_line $(( $ROWS - 3 ))
 
