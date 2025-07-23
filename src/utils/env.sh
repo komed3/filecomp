@@ -2,6 +2,7 @@
 
 # Environment variables
 AVAILABLE_HASHES=()
+MAX_THREADS=$( nproc 2>/dev/null || echo 1 )
 
 # Check available hash commands and populate AVAILABLE_HASHES
 check_available_hashes () {
