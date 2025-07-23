@@ -34,8 +34,15 @@ delete_db () {
 print_result () {
 
     local unique=$( wc -l < "$TMP_FILE" )
+    local -a unique_files
     local tab=0 prev=-1
-    local max=$(( ( $unique / $HEIGHT ) + 1 ))
+    local files_per_page=$(( $HEIGHT - 2 ))
+    local max=$(( ( $unique / $files_per_page ) + 2 ))
+
+    # Load all unique files from TMP_FILE
+    if [[ -f "$TMP_FILE" ]]; then
+        mapfile -t unique_files < "$TMP_FILE"
+    fi
 
     # Print actions
     print_actions "TAB::Page" "BACK::Delete Results" "Q::Quit"
@@ -80,9 +87,18 @@ print_result () {
                 printf "\n%sExit the program with %s[Q]%s." "$PRFX" "$BOLD" "$RESET"
 
             # File page
-            #else
+            else
 
-                # ...
+                local start_idx=$(( ( $tab - 1 ) * $files_per_page ))
+                local end_idx=$(( $start_idx + $files_per_page - 1 ))
+                (( end_idx >= unique )) && end_idx=$(( $unique - 1 ))
+
+                set_line $START
+                printf "Unique files %s[%d/%d]%s\n\n" "$REVID" "$tab" "$(( $max - 1 ))" "$RESET"
+
+                for (( i=start_idx; i <= end_idx && i < unique; i++ )); do
+                    printf "%s%s\n" "$PRFX" "${unique_files[$i]}"
+                done
 
             fi
 
