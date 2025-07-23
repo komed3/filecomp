@@ -13,6 +13,7 @@ COMP_DIR=""
 COPY_DIR=""
 
 HASH_ALGO=0
+HASH_CMD=""
 N_THREADS=0
 OUTP_OPT=0
 DB_DELETE=0
@@ -78,6 +79,15 @@ set_hash_algo () {
 
     # Save the selected hash algorithm
     HASH_ALGO=${result[0]}
+
+    # Determine hash command
+    case "${AVAILABLE_HASHES[$HASH_ALGO]}" in
+        "SHA1" )   HASH_CMD="sha1sum" ;;
+        "SHA256" ) HASH_CMD="sha256sum" ;;
+        "SHA512" ) HASH_CMD="sha256sum" ;;
+        "B2" )     HASH_CMD="b2sum" ;;
+        "MD5" )    HASH_CMD="md5sum" ;;
+    esac
 
 }
 

@@ -26,6 +26,7 @@ compare_files () {
     clear_log
 
     # Print initial log messages
+    update_log "Use ${BOLD}${AVAILABLE_HASHES[$HASH_ALGO]}${RESET} hash algorithm"
     update_log "Run comparison on ${BOLD}${th} thread(s)${RESET}"
     update_log "Use hash database: ${YELLOW}${HASH_DB}${RESET}"
     update_log "Scanning directory: ${YELLOW}${COMP_DIR}${RESET} …"
@@ -77,9 +78,58 @@ compare_files () {
 
         for (( i=0; i < total; i++ )); do
 
-            # ...
+            (
+
+                # Get file
+                local file="${files[$i]}"
+
+                # Try to hash
+                if hash_output=$( "$HASH_CMD" "${files[$i]}" 2>/dev/null ); then
+
+                    # Extract hash value
+                    local hash_value="${hash_output%% *}"
+
+                    # Check if hash exists in database
+                    if [[ -z "${HASHES[$hash_value]}" ]]; then
+
+                        # File is unique, log it
+                        (
+                            flock 200
+                            if (( $OUTP_OPT != 1 )); then echo "$file" >> "$LOG_FILE"; fi
+                            if (( $OUTP_OPT != 0 )); then cp -a "$file" "$COPY_DIR/"; fi
+                        ) 200>"$logfile.lock"
+
+                        # Increment counter
+                        (( unique++ ))
+
+                    fi
+
+                fi
+
+            ) &
+
+            # Run as many threads as allowed
+            if (( ( i + 1 ) % th == 0 )); then wait; fi
+
+            # Update progress bar
+            progress_update $(( $i + 1 ))
+
+            # Log current progress rate (only if more than 10k files)
+            if (( total > 10000 && i * 10 / total > next_log )); then
+                update_log "${BOLD}${i}${RESET} of ${BOLD}${total}${RESET} files processed and ${BOLD}${unique}${RESET} unique found, $( progress_rate ) files/sec …"
+                next_log=$(( $i * 10 / $total ))
+            fi
+
+            # Check for non-blocking user input to quit
+            may_quit
 
         done
+
+        # Finish the process
+        wait; rm "$SCRIPT_DIR/.lock"; progress_finish; status=0
+        update_log ""
+        update_log "${GREEN}Comparison finished: ${BOLD}${unique} unique files${RESET}"
+        update_log "${GREEN}Finished after ${BOLD}$( progress_duration )${RESET}"
 
     fi
 

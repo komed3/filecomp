@@ -16,17 +16,6 @@ create_hashdb () {
     # Get number of threads
     local -i th=${THREADS[$N_THREADS]}
 
-    # Determine hash command
-    local algo="${AVAILABLE_HASHES[$HASH_ALGO]}" cmd=""
-
-    case "$algo" in
-        "SHA1" )   cmd="sha1sum" ;;
-        "SHA256" ) cmd="sha256sum" ;;
-        "SHA512" ) cmd="sha256sum" ;;
-        "B2" )     cmd="b2sum" ;;
-        "MD5" )    cmd="md5sum" ;;
-    esac
-
     # Print actions
     print_actions
 
@@ -37,7 +26,7 @@ create_hashdb () {
     clear_log
 
     # Print initial log messages
-    update_log "Use ${BOLD}${algo}${RESET} hash algorithm"
+    update_log "Use ${BOLD}${AVAILABLE_HASHES[$HASH_ALGO]}${RESET} hash algorithm"
     update_log "Run hashing on ${BOLD}${th} thread(s)${RESET}"
     update_log "Scanning directory: ${YELLOW}${BASE_DIR}${RESET} …"
     update_log "This may take some time …"
@@ -76,7 +65,7 @@ create_hashdb () {
             # Use a subshell to avoid blocking the main script
             # and to allow parallel execution
             (
-                if hash_output=$( "$cmd" "${files[$i]}" 2>/dev/null ); then
+                if hash_output=$( "$HASH_CMD" "${files[$i]}" 2>/dev/null ); then
                     local hash_value="${hash_output%% *}"
                     echo "$hash_value ${files[$i]}" >> "$HASH_DB"
                 fi
