@@ -25,6 +25,11 @@ delete_results () {
 
 }
 
+# Delete the hash database if needed
+delete_db () {
+    if (( DB_DELETE == 1 )); then rm "$HASH_DB"; fi
+}
+
 # Print the result screen and list all unique files
 print_result () {
 
@@ -93,7 +98,7 @@ print_result () {
         case "$KEY" in
             "tab" )   tab=$(( ( $tab + 1 ) % $max )) ;;
             "back" )  delete_results ;;
-            "quit" )  quit ;;
+            "quit" )  delete_db; quit ;;
         esac
 
     done
