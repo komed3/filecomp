@@ -15,8 +15,8 @@ delete_results () {
     clear_actions
     clear_content
 
-    printf "%s%sNow all results and files will be deleted!%s\n" "$PRFX" "$RED" "$RESET"
-    printf "%s%sAfterwards the program will quit.%s\n" "$PRFX" "$RED" "$RESET"
+    printf "%s%s%sNow all results and files will be deleted!%s\n" "$PRFX" "$RED" "$BOLD" "$RESET"
+    printf "%sAfterwards the program will quit.%s\n" "$PRFX" "$RESET"
 
     # Remove the hash database and log file
     rm -f "$HASH_DB" "$LOG_FILE"
