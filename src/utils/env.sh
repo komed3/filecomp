@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Load utility scripts
+source "$SCRIPT_DIR/utils/spinner.sh"
+
 # Environment variables
 TMP_FILE="${TMPDIR:-/tmp}/.filecomp"
 MAX_THREADS=1
@@ -23,6 +26,7 @@ reset_env () {
 
     stty "$ENV_STTY"
     tput sgr0; tput cnorm
+    stop_spinner_all
     rm "$TMP_FILE"
 
     clear; exit 0
