@@ -73,10 +73,12 @@ compare_files () {
             mkdir -p "$COPY_DIR"
         fi
 
-        update_log "";
-
         # Loop trought files
+        update_log ""
+        update_log "Compare files …"
+
         local -i i
+
         for (( i=0; i < total; i++ )); do
 
             (

@@ -53,11 +53,14 @@ create_hashdb () {
 
         # Create/overwrite hash database
         update_log "Initiate hash database: ${YELLOW}${HASH_DB}${RESET} …"
-        update_log "";
         : > "$HASH_DB"
 
         # Loop trought files
+        update_log "";
+        update_log "Hash files …"
+
         local -i i
+
         for (( i=0; i < total; i++ )); do
 
             # Use a subshell to avoid blocking the main script
