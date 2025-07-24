@@ -1,9 +1,10 @@
 # FileComp
 
-FileComp recursively compares two directories for unique files using their hash values.  
+**FileComp** recursively compares two directories for unique files using their hash values.  
 To accomplish this, the program runs through a series of steps.
 
-**Steps:**  
+## Program Steps
+
 (1) Select base directory.  
 (2) Select directory to compare.  
 (3) Choose hash algorithm (e.g., SHA1).  
@@ -15,7 +16,10 @@ To accomplish this, the program runs through a series of steps.
 Use **arrow keys** and **Enter** to navigate menus.  
 Press **Q** anytime to quit.
 
-FileComp operates carefully with your files and will neither change nor move them.
+## Features
+
+FileComp operates carefully with your files and will neither change nor move them.  
+Backup recommended in advance, no guarantee of data integrity.
 
 **Hashing:**  
 It calculates hashes for files to detect unique ones, rather than looking for names.  
@@ -33,7 +37,10 @@ This database will remain in your working directory unless you delete it.
 Beside of logging unique files, FileComp can copies them to a chosen directory.  
 The original files are kept safe.
 
-Users are guided safely through the individual steps, no text input is necessary.
+## User Inputs
+
+Users are guided safely through the individual steps, no text input is necessary.  
+Hashing and comparison can run multi-threaded.
   
 **Navigation:**  
 The controls work intuitively and do not require any direct text input.  
