@@ -15,6 +15,7 @@ setup_env () {
     ENV_STTY=$( stty -g )
 
     trap 'reset_env' INT TERM EXIT
+    trap 'kill 0' EXIT
 
     stty -icanon -echo min 1 time 0
     clear; tput civis
