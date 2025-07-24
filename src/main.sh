@@ -38,11 +38,19 @@ main () {
     # Create the hash database
     create_hashdb
 
-    # Compare files against database
-    compare_files
+    if (( status == 0 )); then
 
-    # Print the result screen
-    print_result
+        # Compare files against database
+        compare_files
+
+        if (( status == 0 )); then
+
+            # Print the result screen
+            print_result
+
+        fi
+
+    fi
 
     # Reset the environment to quit safely
     reset_env
