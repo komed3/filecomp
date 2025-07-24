@@ -52,7 +52,7 @@ print_header () {
 # Print the program footer with credits
 print_footer () {
 
-    local credits="(c) 2025 [MIT] Paul Köhler (komed3) — FILECOME v0.1.0"
+    local credits="(c) 2025 [MIT] Paul Köhler (komed3) — FILECOMP v0.1.0"
     local left=$(( $COLS - ${#credits} ))
 
     set_line $(( $ROWS - 1 )) 0
