@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/utils/ctrl.sh"
 # Help screen for FileComp
 print_help () {
 
-    local tab=0 prev=-1 max=3 screen=()
+    local tab=0 prev=-1 max=4 screen=()
 
     # Print actions
     print_actions "TAB::Page" "ENTER::Proceed" "Q::Quit"
@@ -82,6 +82,20 @@ print_help () {
                     "${BOLD}Output Mode:${RESET}"
                     "By default, the list of unique files will be recorded within a log."
                     "The second method is to copy the files to a new folder."
+                ) ;;
+
+                # Advice
+                3 ) screen=(
+                    "${BOLD}${RED}No guarantee of data integrity or reliability.${RESET}"
+                    "Backup in advance is generally recommended."
+                    ""
+                    "The entire file system is browsable, any folder can be hashed and compared."
+                    "Large folders with many files can take some time."
+                    ""
+                    ""
+                    "(c) 2025 Paul Köhler (komed3) — FILECOMP v0.1.0"
+                    "This program is open-source and published under the MIT license."
+                    "Visit: ${SLINE}https://github.com/komed3/filecomp${RLINE}"
                 ) ;;
 
             esac
