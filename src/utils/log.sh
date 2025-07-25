@@ -5,7 +5,7 @@ source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
 
 # Last log line
-LOG_LAST=$START
+LOG_LAST=$(( $START - 1 ))
 
 # Update the log view with a new message
 # This will print the message on the next available line in the log view.
@@ -55,7 +55,7 @@ print_log_line () {
 clear_log () {
 
     # Reset last log line
-    LOG_LAST=$START
+    LOG_LAST=$(( $START - 1 ))
 
     # Clear the log view
     for (( i=START; i <= END; i++ )); do set_line $i; done
