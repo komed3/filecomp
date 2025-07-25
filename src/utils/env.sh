@@ -15,7 +15,6 @@ setup_env () {
     ENV_STTY=$( stty -g )
 
     trap 'reset_env' INT TERM EXIT
-    trap 'kill 0' EXIT
 
     stty -icanon -echo min 1 time 0
     clear; tput civis
@@ -30,7 +29,7 @@ reset_env () {
     stop_spinner_all
     rm "$TMP_FILE"
 
-    clear; exit 0
+    clear; kill 0; exit 0
 
 }
 
