@@ -76,6 +76,7 @@ compare_files () {
         # Loop trought files
         update_log ""
         update_log "Compare files …"
+        update_log ""
 
         local -i i
 

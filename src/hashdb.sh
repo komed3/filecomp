@@ -58,6 +58,7 @@ create_hashdb () {
         # Loop trought files
         update_log "";
         update_log "Hash files …"
+        update_log ""
 
         local -i i
 
