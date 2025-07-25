@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Load utility scripts
-source "$SCRIPT_DIR/utils/spinner.sh"
-
 # Environment variables
 TMP_FILE="${TMPDIR:-/tmp}/.filecomp"
 MAX_THREADS=1
@@ -12,10 +9,13 @@ AVAILABLE_HASHES=()
 # Setup environment and trap exit signals to quit safely
 setup_env () {
 
+    # Store the current terminal settings
     ENV_STTY=$( stty -g )
 
+    # Trapping signals to reset the environment on exit
     trap 'reset_env' INT TERM EXIT
 
+    # Setup terminal for FileComp
     stty -icanon -echo min 1 time 0
     clear; tput civis
 
@@ -24,12 +24,22 @@ setup_env () {
 # Reset environment and restore terminal settings
 reset_env () {
 
+    # Remove temporary files
+    [[ -f "$TMP_FILE" ]] && rm "$TMP_FILE"
+
+    # Kill all background jobs
+    local pids=$( jobs -p )
+    if [[ -n "$pids" ]]; then
+        for pid in $pids; do
+            kill "$pid" 2>/dev/null
+        done
+        wait
+    fi
+
+    # Restore terminal settings
     stty "$ENV_STTY"
     tput sgr0; tput cnorm
-    stop_spinner_all
-    rm "$TMP_FILE"
 
-    pkill -P $$ 2>/dev/null
     clear; exit 0
 
 }

@@ -7,7 +7,6 @@ source "$SCRIPT_DIR/utils/ui.sh"
 declare -A SLINE
 declare -A STEXT
 SPID=0
-SPINNER=()
 
 # Function to start a spinner
 # Arguments:
@@ -38,7 +37,6 @@ start_spinner () {
 
     SLINE[$SPID]=$1
     STEXT[$SPID]=$2
-    SPINNER+=( $SPID )
 
 }
 
@@ -47,14 +45,8 @@ stop_spinner () {
 
     kill "$1" 2>/dev/null
     wait "$1" 2>/dev/null
-    SPINNER=( "${SPINNER[@]/$1}" )
 
     set_line "${SLINE[$1]}"
     printf "%s%s%s" "$GREEN" "${STEXT[$1]} … DONE" "$RESET"
 
-}
-
-# Stop all running spinner
-stop_spinner_all () {
-    for i in "${SPINNER[@]}"; do stop_spinner "$i"; done
 }
