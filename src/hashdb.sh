@@ -78,6 +78,11 @@ create_hashdb () {
             # Update progress bar
             progress_update $(( $i + 1 ))
 
+            # Update log with current processing rate
+            if (( i > 0 && i % 500 == 0 )); then
+                update_log_last "Current processing rate: ${BOLD}$( progress_rate )${RESET} files/sec …"
+            fi
+
             # Check for non-blocking user input to quit
             may_quit
 
