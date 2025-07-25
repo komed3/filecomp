@@ -29,7 +29,8 @@ reset_env () {
     stop_spinner_all
     rm "$TMP_FILE"
 
-    clear; kill 0; exit 0
+    pkill -P $$ 2>/dev/null
+    clear; exit 0
 
 }
 
