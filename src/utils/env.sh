@@ -17,7 +17,9 @@ setup_env () {
 
     # Setup terminal for FileComp
     stty -icanon -echo min 1 time 0
-    clear; tput civis
+    tput smcup
+    tput civis
+    clear
 
 }
 
@@ -38,9 +40,12 @@ reset_env () {
 
     # Restore terminal settings
     stty "$ENV_STTY"
-    tput sgr0; tput cnorm
+    tput sgr0
+    tput cnorm
+    tput rmcup
 
-    clear; exit 0
+    # Exit the script
+    exit 0
 
 }
 
