@@ -4,29 +4,31 @@
 source "$SCRIPT_DIR/utils/colors.sh"
 source "$SCRIPT_DIR/utils/ui.sh"
 
-# Internal buffer
-LOG=()
+# Last log line
+LOG_LAST=$START
 
-# Update the log buffer with a new message
+# Update the log view with a new message
+# This will print the message on the next available line in the log view.
+# If the log view is full, it will clear the screen and start from the top.
 # Arguments:
 #   $1: Message to log
-# This function appends the message to the log buffer and prints it on the screen.
-# If the log buffer exceeds the terminal height, the oldest entries will be removed.
 update_log () {
 
     # Clear the screen if over capacity
-    if (( ${#LOG[@]} >= HEIGHT )); then clear_log; fi
+    if (( LOG_LAST > HEIGHT )); then clear_log; fi
 
-    # Add the new message to the log buffer
-    LOG+=( "$1" )
-
-    # Calculate log line number
-    local idx=$(( ${#LOG[@]} - 1 ))
-    local line=$(( $START + $idx ))
+    # Increment last log line
+    (( LOG_LAST++ ))
 
     # Print the new message
-    print_log_line "$line" "${LOG[$idx]}"
+    print_log_line "$LOG_LAST" "$1"
 
+}
+
+# Update the log view with a new message
+# This will print the message on the last line of the log view.
+update_log_last () {
+    print_log_line "$LOG_LAST" "$1"
 }
 
 # Internal: Print a log line with a message
@@ -52,8 +54,8 @@ print_log_line () {
 # Clear the log view entirely
 clear_log () {
 
-    # Clear the log buffer
-    LOG=()
+    # Reset last log line
+    LOG_LAST=$START
 
     # Clear the log view
     for (( i=START; i <= END; i++ )); do set_line $i; done
