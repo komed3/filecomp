@@ -1,7 +1,9 @@
 # FileComp
 
-**FileComp** recursively compares two directories for unique files using their hash values.  
-To accomplish this, the program runs through a series of steps.
+**FileComp** recursively compares two directories for unique files using their hash values. To accomplish this, the program runs through a series of steps. Depending on the system running FileComp, different hash algorithms will be available.
+
+The program does not require a GUI and runs on the terminal.  
+Users are guided safely through the process.
 
 ## Installation
 
