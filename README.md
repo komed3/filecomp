@@ -85,3 +85,15 @@ FileComp works with various hash algorithms that are installed on your machine.
 **Output Mode:**  
 By default, the list of unique files will be recorded within a log.  
 The second method is to copy the files to a new folder.
+
+## Notes
+
+No guarantee of data integrity or reliability.  
+Backup in advance is generally recommended.
+
+The entire file system is browsable, any folder can be hashed and compared.  
+Large folders with many files can take some time.
+
+**© 2025 Paul Köhler (komed3)**  
+This program is open-source and published under the MIT license.  
+Visit: https://github.com/komed3/filecomp
