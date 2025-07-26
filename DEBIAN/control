@@ -1,0 +1,11 @@
+Package: filecomp
+Version: 0.1.0
+Maintainer: Paul Köhler (komed3) <deb@komed3.de>
+Architecture: all
+Description: FileComp - Compare directories for unique files using hashes
+ A terminal tool to compare directories for unique files using various hash algorithms.
+Section: utils
+Priority: optional
+Depends: bash, coreutils
+Homepage: https://github.com/komed3/filecomp
+Package-Type: deb
