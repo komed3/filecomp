@@ -3,6 +3,33 @@
 **FileComp** recursively compares two directories for unique files using their hash values.  
 To accomplish this, the program runs through a series of steps.
 
+## Installation
+
+Download the `filecomp.deb` from the [most recent release](https://github.com/komed3/filecomp/releases) and install the package via:
+
+```sh
+sudo dpkg -i filecomp.deb
+```
+
+or build the package using Makefile:
+
+```sh
+# Clone the repository
+git clone https://github.com/komed3/filecomp.git
+
+# Build FileComp
+make build
+
+# Install the package
+make install
+```
+
+Once this is done, the program will be ready to run:
+
+```sh
+filecomp
+```
+
 ## Program Steps
 
 (1) Select base directory.  
