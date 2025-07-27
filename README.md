@@ -7,23 +7,16 @@ Users are guided safely through the process.
 
 ## Installation
 
-Download the `filecomp.deb` from the [most recent release](https://github.com/komed3/filecomp/releases) and install the package via:
+Use the official APT package repository **[deb.komed3.de](https://deb.komed3.de)** and install with:
 
 ```sh
-sudo dpkg -i filecomp.deb
+sudo apt install filecomp
 ```
 
-or build the package using Makefile:
+or download the package directly from the [most recent release](https://github.com/komed3/filecomp/releases) and run:
 
 ```sh
-# Clone the repository
-git clone https://github.com/komed3/filecomp.git
-
-# Build FileComp
-make build
-
-# Install the package
-make install
+sudo dpkg -i filecomp_0.1.0_all.deb
 ```
 
 Once this is done, the program will be ready to run:

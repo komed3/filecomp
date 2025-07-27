@@ -34,7 +34,6 @@ build:
 	mkdir -p $(OUTDIR)
 	@echo "[*] Build Debian package: $(PKGFILE)"
 	dpkg-deb --root-owner-group --build $(SRCDIR) $(DEBFILE)
-	ln -sf $(DEBFILE) $(NAME).deb
 	@echo "[✓] Package created under: $(DEBFILE)"
 
 ## Test package
